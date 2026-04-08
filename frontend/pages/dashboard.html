@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – PawMatch</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body style="background:#f8f9fa;">
+  <!-- Navbar injected by main.js -->
+
+  <div class="dashboard-layout">
+    <!-- ===== SIDEBAR ===== -->
+    <div class="dashboard-sidebar">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+        <h6 id="sidebarName">Loading...</h6>
+        <small id="sidebarEmail">...</small>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="./dashboard.html" class="active">
+          <span class="nav-icon">📊</span> Dashboard
+        </a></li>
+        <li><a href="./profile.html">
+          <span class="nav-icon">👤</span> Profile
+        </a></li>
+        <li><a href="./my-matches.html">
+          <span class="nav-icon">💖</span> My Matches
+        </a></li>
+        <li><a href="./add-pet.html">
+          <span class="nav-icon">➕</span> Add Pet
+        </a></li>
+        <li><a href="./manage-listings.html">
+          <span class="nav-icon">🐾</span> Manage Listings
+        </a></li>
+        <li><a href="./pawswipe.html">
+          <span class="nav-icon">🔥</span> PawSwipe
+        </a></li>
+        <li id="adminNavItem" style="display:none;"><a href="./admin.html">
+          <span class="nav-icon">🔑</span> Admin Panel
+        </a></li>
+      </ul>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="dashboard-main">
+      <h3>📊 Dashboard Overview</h3>
+
+      <!-- Stat Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="stat-card-icon orange">🐾</div>
+            <div>
+              <div class="stat-card-value" id="statListings">0</div>
+              <div class="stat-card-label">My Listings</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="stat-card-icon teal">💖</div>
+            <div>
+              <div class="stat-card-value" id="statMatches">0</div>
+              <div class="stat-card-label">Saved Matches</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="stat-card-icon green">🌟</div>
+            <div>
+              <div class="stat-card-value" id="statSwipes">-</div>
+              <div class="stat-card-label">PawSwipe Ready</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card">
+            <div class="stat-card-icon purple">📅</div>
+            <div>
+              <div class="stat-card-value" id="statMember">-</div>
+              <div class="stat-card-label">Member Since</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <h5 class="fw-bold mb-3">Quick Actions</h5>
+      <div class="quick-actions mb-4">
+        <a href="./add-pet.html" class="quick-action-btn">➕ Add Pet</a>
+        <a href="./manage-listings.html" class="quick-action-btn">🐾 Manage Listings</a>
+        <a href="./pawswipe.html" class="quick-action-btn">🔥 PawSwipe</a>
+        <a href="./my-matches.html" class="quick-action-btn">💖 My Matches</a>
+        <a href="./match-finder.html" class="quick-action-btn">🧠 Match Quiz</a>
+        <a href="./profile.html" class="quick-action-btn">👤 Edit Profile</a>
+      </div>
+
+      <!-- Recent Matches -->
+      <h5 class="fw-bold mb-3">💖 Recently Saved Matches</h5>
+      <div id="recentMatchesContainer">
+        <p class="text-muted">Loading...</p>
+      </div>
+
+      <!-- Not logged in warning -->
+      <div id="loginWarning" style="display:none;" class="alert alert-warning mt-3">
+        Please <a href="./login.html">login</a> to access your dashboard.
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer injected by main.js -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+      const user = getCurrentUser();
+
+      if (!user) {
+        document.getElementById("loginWarning").style.display = "block";
+        document.getElementById("sidebarName").textContent = "Guest";
+        document.getElementById("sidebarEmail").textContent = "Not logged in";
+        return;
+      }
+
+      // Set sidebar user info
+      document.getElementById("sidebarName").textContent = user.name;
+      document.getElementById("sidebarEmail").textContent = user.email;
+      document.getElementById("sidebarAvatar").textContent = user.name.charAt(0).toUpperCase();
+
+      // Show admin nav if admin
+      if (user.role === "admin") {
+        document.getElementById("adminNavItem").style.display = "block";
+      }
+
+      // Load matches from localStorage
+      const matches = JSON.parse(localStorage.getItem("pawmatch_saved") || "[]");
+      document.getElementById("statMatches").textContent = matches.length;
+
+      // Member since
+      const joined = new Date(user.createdAt);
+      document.getElementById("statMember").textContent =
+        joined.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+
+      // Load user's listings from backend
+      try {
+        const response = await fetch(`${API_BASE}/pets`, { credentials: "include" });
+        const allPets = await response.json();
+        const myPets = user.role === "admin" ? allPets : allPets.filter(p => p.owner === user.id);
+        document.getElementById("statListings").textContent = myPets.length;
+      } catch (e) {
+        document.getElementById("statListings").textContent = "?";
+      }
+
+      document.getElementById("statSwipes").textContent = "Ready!";
+
+      // Show recent matches
+      const container = document.getElementById("recentMatchesContainer");
+      if (matches.length === 0) {
+        container.innerHTML = `<p class="text-muted">No saved matches yet. Try <a href="./pawswipe.html">PawSwipe</a>!</p>`;
+      } else {
+        container.innerHTML = `<div class="row g-3">`;
+        matches.slice(0, 4).forEach(pet => {
+          container.querySelector(".row").innerHTML += `
+            <div class="col-6 col-md-3">
+              <div class="card h-100" style="border-radius:14px; border:1px solid #e8e8e8; overflow:hidden;">
+                <img src="${pet.image}" alt="${pet.name}" style="height:120px;object-fit:cover;"
+                  onerror="this.src='https://placehold.co/200x120/f0f0f0/aaa?text=?'">
+                <div class="card-body p-2">
+                  <div class="fw-bold" style="font-size:0.88rem">${pet.name}</div>
+                  <small class="text-muted">${pet.breed}</small><br>
+                  <a href="./pet-details.html?id=${pet.id}" class="btn btn-primary-pawmatch btn-sm mt-1 w-100" style="font-size:0.75rem">View →</a>
+                </div>
+              </div>
+            </div>`;
+        });
+        if (matches.length > 4) {
+          container.querySelector(".row").innerHTML += `
+            <div class="col-12 mt-2">
+              <a href="./my-matches.html" class="btn btn-outline-secondary btn-sm">See all ${matches.length} matches →</a>
+            </div>`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawSwipe – Swipe to Find Your Pet</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/pawswipe.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body>
+  <!-- Navbar injected by main.js -->
+
+  <!-- PawSwipe Main Section -->
+  <div class="pawswipe-wrapper">
+    <!-- Header -->
+    <div class="pawswipe-header">
+      <h2>🐾 PawSwipe</h2>
+      <p>Swipe right to like, swipe left to skip</p>
+      <!-- Swipe Counter -->
+      <div class="swipe-counter" id="swipeCounter">Loading...</div>
+    </div>
+
+    <!-- Loading -->
+    <div id="swipeLoading" style="display:none; justify-content:center; padding:60px;">
+      <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
+    </div>
+
+    <!-- Swipe Card Stack -->
+    <div class="swipe-card-container" id="swipeContainer"></div>
+
+    <!-- Action Buttons -->
+    <div class="swipe-buttons mt-3">
+      <button class="swipe-btn swipe-btn-dislike" id="btnDislike" title="Skip">✕</button>
+      <button class="swipe-btn swipe-btn-info" id="btnInfo" title="View Details">ℹ️</button>
+      <button class="swipe-btn swipe-btn-super" id="btnSuper" title="Super Like">⭐</button>
+      <button class="swipe-btn swipe-btn-like" id="btnLike" title="Like">♥</button>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="text-center mt-4">
+      <a href="./my-matches.html" class="btn btn-outline-secondary btn-sm me-2">
+        💖 View My Matches
+      </a>
+      <a href="./match-finder.html" class="btn btn-outline-secondary btn-sm">
+        🧠 Take Personality Quiz
+      </a>
+    </div>
+
+    <!-- Instructions (visible on first visit) -->
+    <div class="text-center mt-4" style="color:#aaa; font-size:0.82rem;">
+      <span>← Drag or click ✕ to skip</span>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <span>Drag or click ♥ to like →</span>
+    </div>
+  </div>
+
+  <!-- ===================== MATCH POPUP ===================== -->
+  <div class="match-popup" id="matchPopup">
+    <div class="match-popup-inner">
+      <div class="match-emoji">🎉</div>
+      <h2 id="matchTitle">It's a Match!</h2>
+      <p>You liked <strong id="matchPetName"></strong>!<br>They've been saved to your matches.</p>
+      <img id="matchPetImage" src="" alt="" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:16px;border:4px solid white;">
+      <div class="match-popup-btns">
+        <button class="btn-view-match" onclick="window.location.href='./my-matches.html'">💖 View Matches</button>
+        <button class="btn-keep-swiping" id="keepSwiping">Keep Swiping →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer injected by main.js -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/pawswipe.js"></script>
+</body>
+</html>

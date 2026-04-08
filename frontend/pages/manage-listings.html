@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Listings – PawMatch</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+</head>
+<body style="background:#f8f9fa;">
+  <!-- Navbar injected by main.js -->
+
+  <div class="page-banner">
+    <div class="container">
+      <h1>🐾 Manage Listings</h1>
+      <p>View, edit, and delete your pet listings</p>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <!-- Header Row -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <span class="text-muted fw-semibold"><span id="listingCount">0</span> listings found</span>
+      </div>
+      <div class="d-flex gap-2">
+        <input type="text" class="form-control form-control-sm" id="listingSearch"
+          placeholder="Search listings..." style="width:200px;" />
+        <a href="./add-pet.html" class="btn btn-primary-pawmatch btn-sm">➕ Add New Pet</a>
+      </div>
+    </div>
+
+    <!-- Listings Table (filled by JS) -->
+    <div id="listingsContainer"></div>
+  </div>
+
+  <!-- ===== EDIT MODAL ===== -->
+  <div class="modal fade modal-dashboard" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="border-radius:20px;">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">✏️ Edit Pet Listing</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editPetId" />
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Pet Name</label>
+              <input type="text" class="form-control" id="editPetName" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Type</label>
+              <select class="form-select" id="editPetType">
+                <option value="Dog">Dog</option>
+                <option value="Cat">Cat</option>
+                <option value="Rabbit">Rabbit</option>
+                <option value="Bird">Bird</option>
+                <option value="Fish">Fish</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Breed</label>
+              <input type="text" class="form-control" id="editPetBreed" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Age</label>
+              <input type="text" class="form-control" id="editPetAge" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Gender</label>
+              <select class="form-select" id="editPetGender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Location</label>
+              <input type="text" class="form-control" id="editPetLocation" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Status</label>
+              <select class="form-select" id="editPetStatus">
+                <option value="Adoption">Adoption</option>
+                <option value="Rehome">Rehome</option>
+                <option value="Sale">Sale</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Price (৳)</label>
+              <input type="number" class="form-control" id="editPetPrice" min="0" />
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea class="form-control" id="editPetDescription" rows="3"></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Image URL</label>
+              <input type="url" class="form-control" id="editPetImage" />
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="editPetVaccinated" />
+                <label class="form-check-label" for="editPetVaccinated">Vaccinated</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary-pawmatch" id="saveEditBtn" onclick="submitEdit()">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer injected by main.js -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/crud.js"></script>
+</body>
+</html>

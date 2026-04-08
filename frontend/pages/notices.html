@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notices – PawMatch</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    .notice-filter-btn {
+      border: 1.5px solid #e8e8e8;
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: white;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 3px;
+    }
+    .notice-filter-btn:hover,
+    .notice-filter-btn.active {
+      border-color: #ff6b35;
+      color: #ff6b35;
+      background: #fff3ef;
+    }
+    .xml-source-box {
+      background: #1e1e2e;
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .xml-source-box pre {
+      margin: 0;
+      color: #a9b1d6;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar injected by main.js -->
+
+  <div class="page-banner">
+    <div class="container">
+      <h1>📢 Notices & Alerts</h1>
+      <p>Important updates loaded from XML</p>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <div class="row">
+      <!-- ===== NOTICES MAIN ===== -->
+      <div class="col-lg-8">
+        <!-- Count + Filter -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-muted fw-semibold"><span id="noticesCount">0</span> notices</span>
+          <div>
+            <button class="notice-filter-btn active" onclick="filterNotices('All')">All</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Health')">💉 Health</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Alert')">🚨 Alerts</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Campaign')">🎉 Campaigns</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Update')">📢 Updates</button>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="noticesLoading" class="loading-spinner" style="display:flex;">
+          <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
+        </div>
+
+        <!-- Notices (filled by JS) -->
+        <div id="noticesContainer"></div>
+      </div>
+
+      <!-- ===== SIDEBAR: XML Demo ===== -->
+      <div class="col-lg-4">
+        <div class="info-box mb-4">
+          <h6 class="fw-bold mb-3">🔧 XML Integration Demo</h6>
+          <p style="font-size:0.85rem; color:#555;" id="xmlParsedCount">
+            Loading XML data...
+          </p>
+          <p style="font-size:0.82rem; color:#888;">
+            These notices are stored in <code>notices.xml</code> on the server.
+            The backend uses <code>xml2js</code> to parse them, and the browser
+            also demonstrates <code>DOMParser</code> for XML parsing.
+          </p>
+        </div>
+
+        <!-- Raw XML Source Display -->
+        <div class="info-box">
+          <h6 class="fw-bold mb-3">📄 Raw XML Source</h6>
+          <div class="xml-source-box">
+            <pre id="xmlSourceDisplay">Loading...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer injected by main.js -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/notices.js"></script>
+</body>
+</html>

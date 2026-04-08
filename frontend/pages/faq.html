@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ – PawMatch</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/responsive.css" />
+  <style>
+    .accordion-button:not(.collapsed) {
+      color: #ff6b35;
+      background-color: #fff3ef;
+      box-shadow: none;
+    }
+    .accordion-button:focus {
+      box-shadow: 0 0 0 3px rgba(255,107,53,0.15);
+    }
+    .accordion-item {
+      border: 1px solid #e8e8e8;
+      border-radius: 12px !important;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .accordion-item:last-child {
+      border-bottom: 1px solid #e8e8e8 !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar injected by main.js -->
+
+  <div class="page-banner">
+    <div class="container">
+      <h1>❓ Frequently Asked Questions</h1>
+      <p>Everything you need to know about PawMatch</p>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        <!-- Search FAQ -->
+        <div class="mb-4">
+          <input type="text" class="form-control" id="faqSearch"
+            placeholder="🔍 Search questions..." style="border-radius:12px; padding:12px 16px; border:1.5px solid #e8e8e8;" />
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="accordion" id="faqAccordion">
+
+          <!-- General -->
+          <h5 class="fw-bold mt-4 mb-3 text-muted" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">General</h5>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                What is PawMatch?
+              </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                PawMatch is a comprehensive pet platform for Bangladesh where you can adopt pets, trade or rehome pets, connect with a community of pet lovers, use our Match Finder quiz, and discover pets using PawSwipe — our Tinder-style pet swiping experience.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                Is PawMatch free to use?
+              </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                Yes! PawMatch is completely free to browse, search, and use PawSwipe. Creating an account is also free. Listing a pet for adoption or rehoming is free. Pets listed for sale will show the price set by the seller.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                Do I need an account to use PawMatch?
+              </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                No! You can browse pets, use PawSwipe, and read the blog without an account. However, to save matches, add listings, post in the community, or contact owners, you will need to register a free account.
+              </div>
+            </div>
+          </div>
+
+          <!-- Adoption -->
+          <h5 class="fw-bold mt-4 mb-3 text-muted" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">Adoption</h5>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                How does pet adoption work on PawMatch?
+              </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                Browse or PawSwipe to find a pet you like. Click "View Profile" to see full details. If interested, click "Adopt Me" to see adoption steps and contact the shelter or owner directly. Each listing shows the owner's contact information.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                Can I rehome my own pet through PawMatch?
+              </button>
+            </h2>
+            <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                Absolutely! Create an account, go to "Add Pet," and set the listing type to "Rehome." Your pet's profile will be visible to potential adopters. You can edit or remove the listing at any time from "Manage Listings."
+              </div>
+            </div>
+          </div>
+
+          <!-- PawSwipe -->
+          <h5 class="fw-bold mt-4 mb-3 text-muted" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">PawSwipe</h5>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                What is PawSwipe?
+              </button>
+            </h2>
+            <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                PawSwipe is our Tinder-inspired pet discovery feature. Instead of browsing a list, you see one pet at a time and swipe right to like (save) or swipe left to skip. On desktop, you can click the ♥ or ✕ buttons. Liked pets are saved to "My Matches."
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                Where are my saved PawSwipe matches?
+              </button>
+            </h2>
+            <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                All liked pets are saved to your browser's local storage and appear in "My Matches." You can access this from the navbar (under your account menu) or directly at /pages/my-matches.html.
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety -->
+          <h5 class="fw-bold mt-4 mb-3 text-muted" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px;">Safety</h5>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                How do I report a suspicious listing?
+              </button>
+            </h2>
+            <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                If you spot a suspicious or misleading listing, please use the Contact page to report it. Include the pet's name and listing ID. Our admin team reviews all reports and takes action within 24 hours.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item faq-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                Are all listings verified?
+              </button>
+            </h2>
+            <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body text-muted">
+                Listings are moderated by our admin team. We review flagged content and remove listings that violate our guidelines. However, we always recommend meeting in a public place and verifying the pet's health with a vet before completing any transaction.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="text-center mt-5 py-4 bg-light-custom rounded-xl">
+          <h5 class="fw-bold">Still have questions?</h5>
+          <p class="text-muted">Our support team is happy to help!</p>
+          <a href="./contact.html" class="btn btn-primary-pawmatch">Contact Us →</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer injected by main.js -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="../js/main.js"></script>
+
+  <script>
+    // Live FAQ search using jQuery
+    document.addEventListener("DOMContentLoaded", function () {
+      $("#faqSearch").on("input", function () {
+        const query = $(this).val().toLowerCase();
+        $(".faq-item").each(function () {
+          const text = $(this).text().toLowerCase();
+          $(this).toggle(text.includes(query));
+        });
+      });
+    });
+  </script>
+</body>
+</html>

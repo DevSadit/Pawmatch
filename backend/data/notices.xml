@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notices>
+  <notice>
+    <id>1</id>
+    <title>Annual Vaccination Camp - Free for Adopted Pets</title>
+    <category>Health</category>
+    <date>2026-04-15</date>
+    <priority>high</priority>
+    <message>PawMatch is organizing a FREE vaccination camp for all pets adopted through our platform. Bring your pet and adoption certificate to the Dhaka Community Center on April 15, 2026. Vaccinations covered: Rabies, Distemper, Parvovirus. Register at the front desk.</message>
+  </notice>
+  <notice>
+    <id>2</id>
+    <title>Pet Safety Tips for Summer</title>
+    <category>Safety</category>
+    <date>2026-04-10</date>
+    <priority>medium</priority>
+    <message>As temperatures rise, please ensure your pets have access to fresh water at all times. Never leave your pet in a parked car. Walk dogs during cooler parts of the day (early morning or evening). Watch for signs of heatstroke: heavy panting, drooling, lethargy. If in doubt, call your vet immediately.</message>
+  </notice>
+  <notice>
+    <id>3</id>
+    <title>New Shelter Partnership - Chittagong Animal Welfare</title>
+    <category>Update</category>
+    <date>2026-04-08</date>
+    <priority>medium</priority>
+    <message>We are pleased to announce a new partnership with Chittagong Animal Welfare Society. Over 30 new pets are now available for adoption from their shelter. Visit the Browse Pets page to see the latest listings from Chittagong. Together we can find every pet a loving home!</message>
+  </notice>
+  <notice>
+    <id>4</id>
+    <title>Lost and Found: Community Alert</title>
+    <category>Alert</category>
+    <date>2026-04-06</date>
+    <priority>high</priority>
+    <message>Multiple lost pet reports have come in from the Gulshan and Banani areas of Dhaka. If you find a stray animal, please take it to the nearest vet to check for a microchip. You can also post in our Community Feed with a photo. Let's help pets get back to their families.</message>
+  </notice>
+  <notice>
+    <id>5</id>
+    <title>Adoption Campaign: Zero Fees for Senior Pets</title>
+    <category>Campaign</category>
+    <date>2026-04-01</date>
+    <priority>low</priority>
+    <message>April is Senior Pet Adoption Month! PawMatch is running a special campaign with ZERO adoption fees for pets aged 5 years and above. Senior pets make wonderful companions. Give an older animal the loving home they deserve. Browse our senior pets listings today!</message>
+  </notice>
+  <notice>
+    <id>6</id>
+    <title>Platform Maintenance Notice</title>
+    <category>System</category>
+    <date>2026-03-28</date>
+    <priority>low</priority>
+    <message>PawMatch will undergo scheduled maintenance on April 20, 2026 from 2:00 AM to 4:00 AM (BST). The website and app will be temporarily unavailable during this window. We apologize for any inconvenience. This maintenance will improve site speed and add new features.</message>
+  </notice>
+</notices>

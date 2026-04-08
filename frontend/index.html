@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PawMatch – Find Your Perfect Pet</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- PawMatch Custom CSS -->
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/responsive.css" />
+
+  <style>
+    /* ---- Additional Home Page Styles ---- */
+    .feature-icon-box {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      border: 1px solid #f0f0f0;
+      transition: transform 0.3s ease, box-shadow 0.3s;
+      height: 100%;
+    }
+    .feature-icon-box:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+    .feature-icon-box .icon {
+      font-size: 2.5rem;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .feature-icon-box h5 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-icon-box p {
+      color: #6c757d;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    .testimonial-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border: 1px solid #f0f0f0;
+    }
+    .testimonial-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b35, #ff8c5a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: white;
+      font-weight: 700;
+    }
+    .pawswipe-cta {
+      background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+      border-radius: 24px;
+      padding: 60px 40px;
+      text-align: center;
+      color: white;
+    }
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.25s;
+      margin: 6px;
+    }
+    .category-pill:hover {
+      border-color: #ff6b35;
+      color: #ff6b35;
+      background: #fff3ef;
+      transform: translateY(-2px);
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      color: rgba(255,255,255,0.6);
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar injected by main.js -->
+
+  <!-- ======================== HERO SECTION ======================== -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1>Find Your <span>Perfect</span><br>Furry Friend 🐾</h1>
+          <p class="my-4">
+            Adopt, trade, and match with pets in the most fun way possible.
+            Try PawSwipe — our Tinder-style pet discovery experience!
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="./pages/pets.html" class="btn btn-primary-pawmatch btn-lg">Browse Pets →</a>
+            <a href="./pages/pawswipe.html" class="btn btn-outline-pawmatch btn-lg" style="border-color:white; color:white;">
+              🐾 Try PawSwipe
+            </a>
+          </div>
+          <div class="d-flex gap-4 mt-4">
+            <div>
+              <div class="fw-bold text-white" style="font-size:1.4rem" id="heroStatPets">12+</div>
+              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Pets Listed</div>
+            </div>
+            <div>
+              <div class="fw-bold text-white" style="font-size:1.4rem">500+</div>
+              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Happy Families</div>
+            </div>
+            <div>
+              <div class="fw-bold text-white" style="font-size:1.4rem">50+</div>
+              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Shelters</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center d-none d-lg-block">
+          <span class="hero-emoji">🐶</span>
+          <p style="color:rgba(255,255,255,0.5); margin-top:10px; font-size:0.85rem">
+            Swipe right to find your best friend
+          </p>
+        </div>
+      </div>
+    </div>
+    <a href="#featured" class="scroll-indicator text-decoration-none">↓</a>
+  </section>
+
+  <!-- ======================== STATS ======================== -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-number">12+</div>
+            <div class="stat-label">Pets Listed</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Happy Adoptions</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Pet Types</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-box">
+            <div class="stat-number">4★</div>
+            <div class="stat-label">Average Rating</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== FEATURED PETS ======================== -->
+  <section class="py-5" id="featured">
+    <div class="container">
+      <div class="section-title">
+        <h2>Featured Pets 🐾</h2>
+        <div class="title-underline"></div>
+        <p>These adorable animals are waiting for their forever home</p>
+      </div>
+
+      <!-- Loading state -->
+      <div id="featuredLoading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Pets grid (filled by JavaScript) -->
+      <div class="row pets-grid" id="featuredPetsGrid"></div>
+
+      <div class="text-center mt-4">
+        <a href="./pages/pets.html" class="btn btn-primary-pawmatch">
+          See All Pets →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== BROWSE BY CATEGORY ======================== -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="section-title">
+        <h2>Browse by Category</h2>
+        <div class="title-underline"></div>
+        <p>Find the perfect type of pet for your lifestyle</p>
+      </div>
+      <div class="text-center">
+        <a href="./pages/pets.html?type=Dog" class="category-pill">🐶 Dogs</a>
+        <a href="./pages/pets.html?type=Cat" class="category-pill">🐱 Cats</a>
+        <a href="./pages/pets.html?type=Rabbit" class="category-pill">🐰 Rabbits</a>
+        <a href="./pages/pets.html?type=Bird" class="category-pill">🐦 Birds</a>
+        <a href="./pages/pets.html?type=Fish" class="category-pill">🐠 Fish</a>
+        <a href="./pages/pets.html" class="category-pill">🐾 All Pets</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== PAWSWIPE CTA ======================== -->
+  <section class="py-5 bg-light-custom">
+    <div class="container">
+      <div class="pawswipe-cta">
+        <div style="font-size:4rem; margin-bottom:16px; animation: float 3s ease-in-out infinite;">🐾</div>
+        <h2 style="color:white; font-weight:900; font-size:2.2rem;">Discover Pets the Fun Way!</h2>
+        <p style="color:rgba(255,255,255,0.85); font-size:1.05rem; max-width:500px; margin:14px auto 28px;">
+          Try <strong>PawSwipe</strong> — our Tinder-inspired pet discovery feature.
+          Swipe right to like, swipe left to skip. Find your match instantly!
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href="./pages/pawswipe.html" class="btn btn-lg" style="background:white; color:#ff6b35; font-weight:700; border-radius:25px; padding:12px 32px;">
+            🐾 Start PawSwiping!
+          </a>
+          <a href="./pages/match-finder.html" class="btn btn-lg" style="background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.5); font-weight:600; border-radius:25px; padding:12px 32px;">
+            🔍 Take Match Quiz
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== HOW IT WORKS ======================== -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="section-title">
+        <h2>How PawMatch Works</h2>
+        <div class="title-underline"></div>
+        <p>Three simple steps to find your perfect pet companion</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-icon-box">
+            <span class="icon">🔍</span>
+            <h5>1. Discover Pets</h5>
+            <p>Browse our listings or use PawSwipe to discover pets in a fun, swipe-based interface.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-icon-box">
+            <span class="icon">💖</span>
+            <h5>2. Match & Save</h5>
+            <p>Like the pets you love! Saved matches appear in your personal My Matches page.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-icon-box">
+            <span class="icon">🏠</span>
+            <h5>3. Adopt or Trade</h5>
+            <p>Contact the owner or shelter to start the adoption or purchase process. Give a pet a home!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== FEATURES OVERVIEW ======================== -->
+  <section class="py-5 bg-light-custom">
+    <div class="container">
+      <div class="section-title">
+        <h2>Everything You Need</h2>
+        <div class="title-underline"></div>
+      </div>
+      <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">🐾</span>
+            <h5>PawSwipe</h5>
+            <p>Tinder for pets</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">🔍</span>
+            <h5>Browse Pets</h5>
+            <p>Filter & search</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">💱</span>
+            <h5>Trade/Rehome</h5>
+            <p>Marketplace</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">🧠</span>
+            <h5>Match Quiz</h5>
+            <p>AI-style matching</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">💬</span>
+            <h5>Community</h5>
+            <p>Social feed</p>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="feature-icon-box">
+            <span class="icon">📊</span>
+            <h5>Dashboard</h5>
+            <p>Manage listings</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== TESTIMONIALS ======================== -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <div class="section-title">
+        <h2>Happy PawMatch Families</h2>
+        <div class="title-underline"></div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="testimonial-avatar">R</div>
+              <div>
+                <div class="fw-bold">Rahim Ahmed</div>
+                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#555; margin:0">
+              "PawSwipe is so addictive! Found my Labrador Buddy through it in under 5 minutes. The adoption process was smooth and the team was very helpful."
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="testimonial-avatar">F</div>
+              <div>
+                <div class="fw-bold">Fatima Begum</div>
+                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#555; margin:0">
+              "I used the Match Finder quiz and it suggested a Persian cat — exactly what I had in mind! Now I have Oliver and he is the love of my life."
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="testimonial-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="testimonial-avatar">K</div>
+              <div>
+                <div class="fw-bold">Karim Hossain</div>
+                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; color:#555; margin:0">
+              "Rehomed my cat Luna through PawMatch when I had to move abroad. She found an amazing new family within 3 days. Thank you PawMatch!"
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer injected by main.js -->
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery (for any jQuery features) -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <!-- PawMatch Scripts -->
+  <script src="./js/main.js"></script>
+
+  <script>
+    // ---- Load Featured Pets on Home Page ----
+    document.addEventListener("DOMContentLoaded", async function () {
+      const grid = document.getElementById("featuredPetsGrid");
+      const loading = document.getElementById("featuredLoading");
+
+      try {
+        const response = await fetch("http://localhost:5000/api/pets/featured");
+        const pets = await response.json();
+
+        loading.style.display = "none";
+
+        // Show up to 6 featured pets
+        pets.slice(0, 6).forEach((pet) => {
+          const statusColors = { Adoption: "success", Sale: "warning", Rehome: "info" };
+          const badgeColor = statusColors[pet.status] || "secondary";
+
+          const col = document.createElement("div");
+          col.className = "col-md-4 col-sm-6 mb-4";
+          col.innerHTML = `
+            <div class="pet-card h-100">
+              <img src="${pet.image}" alt="${pet.name}"
+                onerror="this.src='https://placehold.co/400x300/f0f0f0/aaa?text=No+Image'">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                  <span class="pet-name">${pet.name}</span>
+                  <span class="badge bg-${badgeColor}">${pet.status}</span>
+                </div>
+                <div class="pet-breed">${pet.breed} · ${pet.type}</div>
+                <div class="pet-tags">
+                  <span class="pet-tag">📍 ${pet.location}</span>
+                  <span class="pet-tag">🎂 ${pet.age}</span>
+                  <span class="pet-tag">${pet.gender}</span>
+                </div>
+                <a href="./pages/pet-details.html?id=${pet.id}" class="btn btn-primary-pawmatch btn-sm w-100 mt-2">
+                  View Profile →
+                </a>
+              </div>
+            </div>`;
+          grid.appendChild(col);
+        });
+      } catch (err) {
+        loading.style.display = "none";
+        grid.innerHTML = `
+          <div class="col-12 text-center py-4">
+            <p class="text-muted">⚠️ Start the backend server to see featured pets.</p>
+            <a href="./pages/pets.html" class="btn btn-primary-pawmatch">Browse Pets Anyway</a>
+          </div>`;
+      }
+    });
+  </script>
+</body>
+</html>

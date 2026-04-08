@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "Top 5 Tips for First-Time Pet Owners",
+    "summary": "Getting a pet for the first time? Here are the essential things you need to know before bringing your new companion home.",
+    "content": "Adopting a pet is one of the most rewarding experiences in life, but it comes with responsibility. First, research the breed or species you plan to adopt — different animals have vastly different care needs. Second, prepare your home before the pet arrives. Remove hazards, set up a sleeping area, and stock up on food, toys, and grooming supplies. Third, schedule a vet visit within the first week. Early health checks can catch problems before they become serious. Fourth, be patient during the adjustment period. Your new pet may be anxious or shy at first — give them time to feel safe. Fifth, establish routines early. Consistent feeding times, walk schedules, and play sessions help pets feel secure and reduce behavioral issues.",
+    "author": "Dr. Amina Rahman",
+    "category": "Tips",
+    "image": "https://placehold.co/800x400/fff3e0/555?text=Pet+Care+Tips",
+    "date": "2026-02-10",
+    "readTime": "5 min read"
+  },
+  {
+    "id": 2,
+    "title": "Understanding Your Cat's Body Language",
+    "summary": "Cats communicate in subtle ways. Learn what your feline friend is really saying through their posture, tail, and eyes.",
+    "content": "Cats are masters of non-verbal communication. A slow blink from your cat is actually a sign of trust and affection — try blinking slowly back at them! When a cat holds their tail straight up, they are happy and confident. A puffed-up tail signals fear or aggression. Ears flattened back mean your cat is scared or angry. Kneading (making biscuits) is a comforting behavior inherited from kittenhood. Chirping or chattering is often directed at birds or other prey they spot outside a window. Understanding these signals helps you respond to your cat's needs better and builds a stronger bond.",
+    "author": "Riya Chowdhury",
+    "category": "Cats",
+    "image": "https://placehold.co/800x400/e3f2fd/555?text=Cat+Body+Language",
+    "date": "2026-02-18",
+    "readTime": "4 min read"
+  },
+  {
+    "id": 3,
+    "title": "How to Train Your Dog: Basic Commands",
+    "summary": "Training your dog doesn't have to be difficult. Start with these five essential commands for a well-behaved companion.",
+    "content": "Every dog can learn basic commands with patience, consistency, and positive reinforcement. Start with 'Sit' — hold a treat close to your dog's nose, then move your hand up so their bottom lowers. When they sit, say the command, give the treat, and show affection. For 'Stay', ask the dog to sit, open your palm in front of you and say 'Stay', take a few steps back, reward if they stay. For 'Come', say 'Come' while crouching down and opening your arms. Reward when they reach you. 'Down' is taught by holding a treat in your closed hand near the dog's nose, moving it to the floor. 'Leave It' protects your dog from dangerous items — hold a treat in both hands, show the closed fist, say 'leave it', reward when they move away.",
+    "author": "Tanvir Hossain",
+    "category": "Dogs",
+    "image": "https://placehold.co/800x400/f1f8e9/555?text=Dog+Training",
+    "date": "2026-03-01",
+    "readTime": "6 min read"
+  },
+  {
+    "id": 4,
+    "title": "The Benefits of Adopting a Senior Pet",
+    "summary": "Older pets often get overlooked in shelters, but they make wonderful companions. Here is why you should consider adopting a senior animal.",
+    "content": "Senior pets — generally considered 7+ years for dogs and 10+ for cats — are often the last to be adopted from shelters. But they have so much love to give! Older pets are typically calmer, already house-trained, and know basic commands. They are less destructive than puppies or kittens and are happy with a comfortable bed and your company. Senior pets are also deeply grateful for a second chance at a loving home, creating a profound bond with their new family. Veterinary care may cost slightly more as they age, but the emotional return is immeasurable. Consider giving a senior pet the golden years they deserve.",
+    "author": "Dr. Amina Rahman",
+    "category": "Adoption",
+    "image": "https://placehold.co/800x400/fce4ec/555?text=Senior+Pet+Adoption",
+    "date": "2026-03-10",
+    "readTime": "5 min read"
+  },
+  {
+    "id": 5,
+    "title": "Choosing the Right Pet for Your Lifestyle",
+    "summary": "Not sure which pet is right for you? Matching your lifestyle with the right animal makes all the difference.",
+    "content": "Before adopting a pet, honestly assess your lifestyle. If you are very active and outdoorsy, a high-energy dog breed like a Border Collie or Labrador might be perfect. If you live in an apartment and work long hours, a cat or small dog breed may be a better fit. Fish are ideal for people who want a low-maintenance pet that adds beauty to their home. Birds can be wonderful companions if you enjoy social interaction and have time to engage with them daily. Rabbits and guinea pigs are great for families with older children. The key is matching the pet's energy level, space requirements, and social needs to what you can genuinely provide. A happy pet comes from a good match, not just a good intention.",
+    "author": "Riya Chowdhury",
+    "category": "Tips",
+    "image": "https://placehold.co/800x400/e8f5e9/555?text=Choose+Your+Pet",
+    "date": "2026-03-20",
+    "readTime": "7 min read"
+  },
+  {
+    "id": 6,
+    "title": "Pet Vaccination Guide for Bangladesh",
+    "summary": "Understanding which vaccinations your pet needs and when to get them is crucial for their health and safety.",
+    "content": "Vaccinations protect your pets from serious and sometimes fatal diseases. For dogs, core vaccines include Distemper, Parvovirus, Adenovirus, and Rabies. Puppies should start their vaccine schedule at 6-8 weeks of age, with boosters every 3-4 weeks until 16 weeks. Adult dogs need annual or triennial boosters depending on the vaccine type. For cats, core vaccines include Panleukopenia, Feline Herpesvirus, Calicivirus, and Rabies. Kittens start at 8 weeks with a series of shots. In Bangladesh, Rabies vaccination is especially important as stray animal populations are significant. Always keep a vaccination record card for your pet and consult a registered veterinarian for a proper vaccination schedule tailored to your pet's lifestyle.",
+    "author": "Dr. Karim Uddin",
+    "category": "Health",
+    "image": "https://placehold.co/800x400/e8eaf6/555?text=Pet+Vaccination",
+    "date": "2026-04-01",
+    "readTime": "6 min read"
+  }
+]

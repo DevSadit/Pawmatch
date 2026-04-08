@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Admin User",
+    "email": "admin@pawmatch.com",
+    "password": "admin123",
+    "role": "admin",
+    "avatar": "",
+    "preferences": {
+      "petType": "Dog",
+      "energy": "High",
+      "homeType": "House"
+    },
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "password": "password123",
+    "role": "user",
+    "avatar": "",
+    "preferences": {
+      "petType": "Cat",
+      "energy": "Low",
+      "homeType": "Apartment"
+    },
+    "createdAt": "2026-01-05T10:00:00.000Z"
+  }
+]

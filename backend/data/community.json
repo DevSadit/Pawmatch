@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1001,
+    "content": "Just adopted Bella from PawMatch and she has already become part of the family! 🐶 The adoption process was so smooth. Highly recommend this platform to everyone looking to adopt!",
+    "authorId": 2,
+    "authorName": "Jane Doe",
+    "image": "",
+    "likes": 24,
+    "likedBy": [],
+    "createdAt": "2026-03-15T10:30:00.000Z"
+  },
+  {
+    "id": 1002,
+    "content": "Reminder: Please vaccinate your pets! I just got my cats their annual boosters today. It takes 10 minutes and can save their lives. Let's be responsible pet owners! 🐱💉",
+    "authorId": 1,
+    "authorName": "Admin User",
+    "image": "",
+    "likes": 18,
+    "likedBy": [],
+    "createdAt": "2026-03-20T14:00:00.000Z"
+  },
+  {
+    "id": 1003,
+    "content": "Tip for new dog owners: The first 3 days after adoption are critical. Give your dog space, keep things calm, and don't rush introductions. By week 3 you will see their real personality bloom! 🐕",
+    "authorId": 2,
+    "authorName": "Jane Doe",
+    "image": "",
+    "likes": 35,
+    "likedBy": [],
+    "createdAt": "2026-04-01T09:00:00.000Z"
+  },
+  {
+    "id": 1004,
+    "content": "Lost cat in Dhaka Gulshan area! Black and white, answers to Oreo. Please DM if found. Sharing is caring 🙏 #LostCat #Dhaka",
+    "authorId": 1,
+    "authorName": "Admin User",
+    "image": "",
+    "likes": 42,
+    "likedBy": [],
+    "createdAt": "2026-04-05T16:00:00.000Z"
+  }
+]
