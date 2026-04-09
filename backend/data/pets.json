@@ -1,6 +1,5 @@
 [
   {
-    "id": 101,
     "name": "Bella",
     "type": "Dog",
     "breed": "Golden Retriever",
@@ -19,7 +18,6 @@
     "createdAt": "2026-01-10T10:00:00.000Z"
   },
   {
-    "id": 102,
     "name": "Oliver",
     "type": "Cat",
     "breed": "Persian",
@@ -38,7 +36,6 @@
     "createdAt": "2026-01-12T11:00:00.000Z"
   },
   {
-    "id": 103,
     "name": "Max",
     "type": "Dog",
     "breed": "German Shepherd",
@@ -57,7 +54,6 @@
     "createdAt": "2026-01-15T09:00:00.000Z"
   },
   {
-    "id": 104,
     "name": "Luna",
     "type": "Cat",
     "breed": "Siamese",
@@ -76,7 +72,6 @@
     "createdAt": "2026-01-20T14:00:00.000Z"
   },
   {
-    "id": 105,
     "name": "Rocky",
     "type": "Dog",
     "breed": "Labrador Retriever",
@@ -95,7 +90,6 @@
     "createdAt": "2026-01-25T12:00:00.000Z"
   },
   {
-    "id": 106,
     "name": "Milo",
     "type": "Rabbit",
     "breed": "Holland Lop",
@@ -114,7 +108,6 @@
     "createdAt": "2026-02-01T10:00:00.000Z"
   },
   {
-    "id": 107,
     "name": "Daisy",
     "type": "Dog",
     "breed": "Beagle",
@@ -133,7 +126,6 @@
     "createdAt": "2026-02-05T11:00:00.000Z"
   },
   {
-    "id": 108,
     "name": "Simba",
     "type": "Cat",
     "breed": "Maine Coon",
@@ -152,7 +144,6 @@
     "createdAt": "2026-02-10T09:30:00.000Z"
   },
   {
-    "id": 109,
     "name": "Tweety",
     "type": "Bird",
     "breed": "Budgerigar",
@@ -171,7 +162,6 @@
     "createdAt": "2026-02-15T14:00:00.000Z"
   },
   {
-    "id": 110,
     "name": "Coco",
     "type": "Dog",
     "breed": "Poodle",
@@ -190,7 +180,6 @@
     "createdAt": "2026-02-20T10:00:00.000Z"
   },
   {
-    "id": 111,
     "name": "Nemo",
     "type": "Fish",
     "breed": "Clownfish",
@@ -209,7 +198,6 @@
     "createdAt": "2026-03-01T11:00:00.000Z"
   },
   {
-    "id": 112,
     "name": "Brownie",
     "type": "Dog",
     "breed": "Dachshund",

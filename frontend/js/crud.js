@@ -109,9 +109,7 @@ async function loadUserListings() {
 
   try {
     const allPets = await apiFetch("/pets");
-    const ownPets = user.role === "admin"
-      ? allPets
-      : allPets.filter((pet) => pet.owner === user.id || pet.owner === user._id);
+    const ownPets = allPets.filter((pet) => pet.owner === user.id || pet.owner === user._id);
 
     const query = searchInput?.value.trim().toLowerCase() || "";
     const filteredPets = query

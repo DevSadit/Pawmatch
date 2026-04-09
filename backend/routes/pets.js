@@ -111,10 +111,7 @@ router.put("/:id", async (req, res) => {
     const pet = await Pet.findById(req.params.id);
     if (!pet) return res.status(404).json({ message: "Pet not found" });
 
-    if (
-      pet.owner.toString() !== req.session.userId &&
-      req.session.userRole !== "admin"
-    ) {
+    if (pet.owner.toString() !== req.session.userId) {
       return res.status(403).json({ message: "Not authorized" });
     }
 
@@ -144,10 +141,7 @@ router.delete("/:id", async (req, res) => {
     const pet = await Pet.findById(req.params.id);
     if (!pet) return res.status(404).json({ message: "Pet not found" });
 
-    if (
-      pet.owner.toString() !== req.session.userId &&
-      req.session.userRole !== "admin"
-    ) {
+    if (pet.owner.toString() !== req.session.userId) {
       return res.status(403).json({ message: "Not authorized" });
     }
 

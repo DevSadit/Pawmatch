@@ -27,8 +27,7 @@ router.post("/register", async (req, res) => {
     const hashed  = await bcrypt.hash(password, 12);
     const newUser = await User.create({ name, email, password: hashed });
 
-    req.session.userId   = newUser._id.toString();
-    req.session.userRole = newUser.role;
+    req.session.userId = newUser._id.toString();
 
     res.status(201).json({ message: "Registration successful", user: newUser.toJSON() });
   } catch (err) {
@@ -62,8 +61,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    req.session.userId   = user._id.toString();
-    req.session.userRole = user.role;
+    req.session.userId = user._id.toString();
 
     res.json({ message: "Login successful", user: user.toJSON() });
   } catch (err) {

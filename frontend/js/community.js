@@ -43,8 +43,7 @@ async function loadCommunityPosts() {
 function renderPost(post) {
   const user     = getCurrentUser();
   const isOwner  = user && (user.id === post.authorId || user._id === post.authorId);
-  const isAdmin  = user && user.role === "admin";
-  const canDelete= isOwner || isAdmin;
+  const canDelete= isOwner;
 
   const div = document.createElement("div");
   div.id    = `post-${post.id}`;

@@ -1,10 +1,9 @@
 [
   {
     "id": 1,
-    "name": "Admin User",
-    "email": "admin@pawmatch.com",
-    "password": "admin123",
-    "role": "admin",
+    "name": "Ava Rahman",
+    "email": "ava@pawmatch.com",
+    "password": "password123",
     "avatar": "",
     "preferences": {
       "petType": "Dog",
@@ -18,7 +17,6 @@
     "name": "Jane Doe",
     "email": "jane@example.com",
     "password": "password123",
-    "role": "user",
     "avatar": "",
     "preferences": {
       "petType": "Cat",
@@ -32,7 +30,6 @@
     "name": "Jane E",
     "email": "jane@e.com",
     "password": "password123",
-    "role": "user",
     "avatar": "",
     "preferences": {
       "petType": "",

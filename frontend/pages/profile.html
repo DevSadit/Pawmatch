@@ -62,8 +62,6 @@
         <div class="flex-1 min-w-0">
           <h2 class="font-headline font-bold text-xl text-on-surface" id="profileNameDisplay">Loading...</h2>
           <p class="text-on-surface-variant text-sm" id="profileEmailDisplay"></p>
-          <span id="profileRoleBadge"
-                class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-bold font-label"></span>
         </div>
         <div class="hidden sm:flex flex-col gap-2">
           <a href="./manage-listings.html"
@@ -152,17 +150,6 @@
       document.getElementById("profileNameDisplay").textContent = user.name;
       document.getElementById("profileEmailDisplay").textContent = user.email;
       document.getElementById("newName").value = user.name;
-
-      const badge = document.getElementById("profileRoleBadge");
-      if (user.role === "admin") {
-        badge.textContent = "Admin";
-        badge.style.background = "#fee2e2";
-        badge.style.color = "#b02500";
-      } else {
-        badge.textContent = "User";
-        badge.style.background = "#e9e8e4";
-        badge.style.color = "#5b5c59";
-      }
 
       if (user.preferences) {
         document.getElementById("prefPetType").value = user.preferences.petType || "";

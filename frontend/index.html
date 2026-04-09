@@ -502,9 +502,7 @@
         window.saveToMatchesHome = saveToMatches;
 
         try {
-          const response = await fetch(
-            "http://localhost:5000/api/pets/featured",
-          );
+          const response = await fetch("/api/pets/featured");
           const pets = await response.json();
           loading.style.display = "none";
 

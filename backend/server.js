@@ -14,9 +14,14 @@ const connectDB    = require("./db");
 
 const app  = express();
 const PORT = process.env.PORT || 5000;
+const isProduction = process.env.NODE_ENV === "production";
 
 // ---- Connect to MongoDB Atlas ----
 connectDB();
+
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
 
 // ---- Middleware ----
 app.use(
@@ -46,7 +51,7 @@ app.use(session({
     ttl:         60 * 60 * 24, // 1 day in seconds
   }),
   cookie: {
-    secure:  false,          // set true when using HTTPS in production
+    secure:  isProduction,
     maxAge:  1000 * 60 * 60 * 24, // 1 day in ms
   },
 }));
@@ -61,7 +66,6 @@ app.use("/api/auth",      require("./routes/auth"));
 app.use("/api/community", require("./routes/community"));
 app.use("/api/blog",      require("./routes/blog"));
 app.use("/api/notices",   require("./routes/notices"));
-app.use("/api/admin",     require("./routes/admin"));
 app.use("/api/matches",   require("./routes/matches"));
 
 // ---- Catch-all: serve index.html ----

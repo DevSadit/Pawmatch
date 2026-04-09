@@ -46,7 +46,6 @@ async function seed() {
       name:        u.name,
       email:       u.email,
       password,
-      role:        u.role || "user",
       avatar:      u.avatar || "",
       preferences: u.preferences || {},
     });

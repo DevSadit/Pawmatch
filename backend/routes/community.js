@@ -59,10 +59,7 @@ router.delete("/:id", async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ message: "Post not found" });
 
-    if (
-      post.authorId.toString() !== req.session.userId &&
-      req.session.userRole !== "admin"
-    ) {
+    if (post.authorId.toString() !== req.session.userId) {
       return res.status(403).json({ message: "Not authorized" });
     }
 

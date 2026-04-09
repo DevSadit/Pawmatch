@@ -368,7 +368,7 @@ function getTopBarHTML(user) {
     { label: "Browse", href: `${pagesBase}pets.html`, active: ["pets.html", "pet-details.html"] },
     { label: "PawSwipe", href: `${pagesBase}pawswipe.html`, active: ["pawswipe.html", "my-matches.html", "match-finder.html"] },
     { label: "Forum", href: `${pagesBase}community.html`, active: ["community.html", "blog.html", "notices.html"] },
-    { label: "Account", href: dashLink, active: ["dashboard.html", "profile.html", "login.html", "register.html", "admin.html"] },
+    { label: "Account", href: dashLink, active: ["dashboard.html", "profile.html", "login.html", "register.html"] },
   ];
 
   const navLinksHTML = navTabs
@@ -410,7 +410,7 @@ function getBottomNavHTML() {
     { icon: "search", label: "Browse", href: `${pagesBase}pets.html`, active: ["pets.html", "pet-details.html"] },
     { icon: "style", label: "Swipe", href: `${pagesBase}pawswipe.html`, active: ["pawswipe.html", "my-matches.html", "match-finder.html"] },
     { icon: "groups", label: "Forum", href: `${pagesBase}community.html`, active: ["community.html", "blog.html", "notices.html"] },
-    { icon: "person", label: "Account", href: `${pagesBase}dashboard.html`, active: ["dashboard.html", "profile.html", "admin.html"] },
+    { icon: "person", label: "Account", href: `${pagesBase}dashboard.html`, active: ["dashboard.html", "profile.html"] },
   ];
 
   const tabsHTML = tabs

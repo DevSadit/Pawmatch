@@ -134,10 +134,6 @@
              class="flex-shrink-0 bg-surface-container-highest text-on-surface px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
             Edit Profile
           </a>
-          <a href="./admin.html" id="adminLink" style="display:none"
-             class="flex-shrink-0 bg-tertiary text-on-tertiary px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
-            Admin Panel
-          </a>
         </section>
 
         <!-- Recent Activity -->
@@ -276,9 +272,6 @@
       // Greet user
       document.getElementById("welcomeHeading").textContent = `Hi, ${user.name.split(" ")[0]}! 🐾`;
 
-      // Show admin link
-      if (user.role === "admin") document.getElementById("adminLink").style.display = "block";
-
       // Load matches
       const matches = normalizeMatchEntries(await getSavedMatches().catch(() => []));
       document.getElementById("statMatches").textContent = matches.length;
@@ -294,9 +287,7 @@
       // Load listings from backend
       try {
         const allPets = await apiFetch("/pets");
-        const myPets = user.role === "admin"
-          ? allPets
-          : allPets.filter(p => p.owner === user.id || p.owner === user._id);
+        const myPets = allPets.filter(p => p.owner === user.id || p.owner === user._id);
         document.getElementById("statListings").textContent = myPets.length;
       } catch {
         document.getElementById("statListings").textContent = "?";
