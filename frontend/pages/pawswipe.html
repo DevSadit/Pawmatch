@@ -1,68 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PawSwipe – Swipe to Find Your Pet</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/pawswipe.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <title>PawSwipe – PawMatch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "on-primary-container":     "#451b00",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "secondary-fixed":          "#7cf6ec",
+            "on-secondary-container":   "#005c57",
+            "tertiary":                 "#aa2c32",
+            "on-tertiary":              "#ffefee",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
+  <!-- Swipe card CSS (animations + card structure) -->
+  <link rel="stylesheet" href="../css/pawswipe.css"/>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    /* Mobile: lock scroll so card fills screen */
+    body { overflow: hidden; }
+    @media (min-width: 1024px) {
+      /* Desktop: allow normal page flow */
+      body { overflow: auto; }
+    }
+  </style>
 </head>
-<body>
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface" style="min-height:100dvh;">
 
-  <!-- PawSwipe Main Section -->
-  <div class="pawswipe-wrapper">
-    <!-- Header -->
-    <div class="pawswipe-header">
-      <h2>🐾 PawSwipe</h2>
-      <p>Swipe right to like, swipe left to skip</p>
-      <!-- Swipe Counter -->
-      <div class="swipe-counter" id="swipeCounter">Loading...</div>
-    </div>
-
-    <!-- Loading -->
-    <div id="swipeLoading" style="display:none; justify-content:center; padding:60px;">
-      <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
-    </div>
-
-    <!-- Swipe Card Stack -->
-    <div class="swipe-card-container" id="swipeContainer"></div>
-
-    <!-- Action Buttons -->
-    <div class="swipe-buttons mt-3">
-      <button class="swipe-btn swipe-btn-dislike" id="btnDislike" title="Skip">✕</button>
-      <button class="swipe-btn swipe-btn-info" id="btnInfo" title="View Details">ℹ️</button>
-      <button class="swipe-btn swipe-btn-super" id="btnSuper" title="Super Like">⭐</button>
-      <button class="swipe-btn swipe-btn-like" id="btnLike" title="Like">♥</button>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="text-center mt-4">
-      <a href="./my-matches.html" class="btn btn-outline-secondary btn-sm me-2">
-        💖 View My Matches
-      </a>
-      <a href="./match-finder.html" class="btn btn-outline-secondary btn-sm">
-        🧠 Take Personality Quiz
-      </a>
-    </div>
-
-    <!-- Instructions (visible on first visit) -->
-    <div class="text-center mt-4" style="color:#aaa; font-size:0.82rem;">
-      <span>← Drag or click ✕ to skip</span>
-      &nbsp;&nbsp;|&nbsp;&nbsp;
-      <span>Drag or click ♥ to like →</span>
-    </div>
+  <!-- Ambient background wash (full page) -->
+  <div class="fixed inset-0 z-0 pointer-events-none opacity-10 lg:opacity-[0.07]">
+    <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-gradient-to-br from-primary to-primary-container blur-[100px]"></div>
   </div>
 
-  <!-- ===================== MATCH POPUP ===================== -->
+  <main class="relative w-full flex flex-col items-center justify-center pt-20 pb-28 px-4 overflow-hidden
+               h-screen
+               lg:h-auto lg:overflow-visible lg:pt-28 lg:pb-16 lg:flex-row lg:items-start lg:justify-center lg:gap-12 lg:max-w-5xl lg:mx-auto lg:px-8">
+
+    <!-- ── LEFT / CENTER: Card column ── -->
+    <div class="flex flex-col items-center z-10 lg:flex-shrink-0">
+
+      <!-- Counter -->
+      <div class="mb-3 text-center">
+        <p class="text-on-surface-variant text-sm font-medium" id="swipeCounter">Loading pets...</p>
+      </div>
+
+      <!-- Loading -->
+      <div id="swipeLoading" class="flex justify-center py-8" style="display:none!important;">
+        <div class="w-10 h-10 border-4 border-primary-container border-t-primary rounded-full animate-spin"></div>
+      </div>
+
+      <!-- Card Stack -->
+      <div class="relative w-full max-w-sm flex flex-col justify-center lg:w-[360px]" style="height:520px;">
+        <div class="absolute inset-0 translate-y-6 scale-[0.90] bg-surface-container-high rounded-xl opacity-50 pointer-events-none"></div>
+        <div class="absolute inset-0 translate-y-3 scale-[0.95] bg-surface-container-low rounded-xl opacity-70 pointer-events-none"></div>
+        <div id="swipeContainer" class="swipe-card-container" style="width:100%;height:520px;position:relative;"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-center items-center gap-5 mt-6">
+        <button id="btnDislike"
+          class="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-error hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100">
+          <span class="material-symbols-outlined text-2xl font-bold">close</span>
+        </button>
+        <button id="btnInfo"
+          class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-secondary hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100">
+          <span class="material-symbols-outlined text-xl">info</span>
+        </button>
+        <button id="btnSuper"
+          class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100" style="color:#006761;">
+          <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">star</span>
+        </button>
+        <button id="btnLike"
+          class="w-20 h-20 rounded-full flex items-center justify-center text-white hover:scale-110 active:scale-90 transition-all duration-300 shadow-[0_10px_20px_rgba(150,67,0,0.3)]"
+          style="background: linear-gradient(135deg, #964300, #f9873e);">
+          <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1">favorite</span>
+        </button>
+      </div>
+
+      <!-- Quick Links (mobile only — shown in sidebar on desktop) -->
+      <div class="flex gap-4 mt-5 lg:hidden">
+        <a href="./my-matches.html"
+           class="text-primary font-bold text-xs font-label uppercase tracking-widest flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">favorite</span>
+          My Matches
+        </a>
+        <span class="text-outline-variant">·</span>
+        <a href="./match-finder.html"
+           class="text-on-surface-variant font-bold text-xs font-label uppercase tracking-widest flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">quiz</span>
+          Personality Quiz
+        </a>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Info sidebar (desktop only) ── -->
+    <aside class="hidden lg:flex flex-col gap-6 z-10 w-72 flex-shrink-0 lg:sticky lg:top-28">
+
+      <!-- How to swipe -->
+      <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
+        <h3 class="font-headline font-bold text-base mb-4 text-on-surface">How to Swipe</h3>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-error text-lg">close</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">Click <strong class="text-on-surface">✕ Pass</strong> or drag left to skip</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,#964300,#f9873e)">
+              <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">favorite</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">Click <strong class="text-on-surface">♥ Like</strong> or drag right to save</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-secondary-container/30 border border-secondary-container/50 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings:'FILL' 1">star</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">Click <strong class="text-on-surface">★ Super Like</strong> for an instant match</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-3">
+        <h3 class="font-headline font-bold text-base mb-1 text-on-surface">Your Activity</h3>
+        <a href="./my-matches.html"
+           class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+          <span class="material-symbols-outlined text-tertiary" style="font-variation-settings:'FILL' 1">favorite</span>
+          <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">View My Matches</span>
+          <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+        </a>
+        <a href="./match-finder.html"
+           class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+          <span class="material-symbols-outlined text-secondary">quiz</span>
+          <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Personality Quiz</span>
+          <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+        </a>
+        <a href="./pets.html"
+           class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
+          <span class="material-symbols-outlined text-primary">search</span>
+          <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Browse All Pets</span>
+          <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+        </a>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- Match Popup (keep existing structure for JS) -->
   <div class="match-popup" id="matchPopup">
-    <div class="match-popup-inner">
+    <div class="match-popup-inner" style="background:linear-gradient(135deg,#964300,#f9873e);">
       <div class="match-emoji">🎉</div>
       <h2 id="matchTitle">It's a Match!</h2>
       <p>You liked <strong id="matchPetName"></strong>!<br>They've been saved to your matches.</p>
-      <img id="matchPetImage" src="" alt="" style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:16px;border:4px solid white;">
+      <img id="matchPetImage" src="" alt=""
+        style="width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:16px;border:4px solid white;">
       <div class="match-popup-btns">
         <button class="btn-view-match" onclick="window.location.href='./my-matches.html'">💖 View Matches</button>
         <button class="btn-keep-swiping" id="keepSwiping">Keep Swiping →</button>
@@ -70,10 +191,6 @@
     </div>
   </div>
 
-  <!-- Footer injected by main.js -->
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/pawswipe.js"></script>
 </body>

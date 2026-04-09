@@ -1,150 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Community Feed – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
-  <style>
-    .community-layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 30px;
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "tertiary":                 "#aa2c32",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
     }
-    .community-post-card {
-      border-radius: 14px;
-      border: 1px solid #e8e8e8;
-      transition: box-shadow 0.2s;
-    }
-    .community-post-card:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-    .post-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b35, #ff8c5a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: white;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .sidebar-widget {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid #e8e8e8;
-      margin-bottom: 20px;
-    }
-    .post-form-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid #e8e8e8;
-      margin-bottom: 24px;
-    }
-    .like-btn {
-      border: 1px solid #e8e8e8;
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 0.85rem;
-      transition: all 0.2s;
-    }
-    .like-btn:hover {
-      border-color: #dc3545;
-      color: #dc3545;
-    }
-    @media (max-width: 768px) {
-      .community-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+  </script>
+  <style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
 </head>
-<body>
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <div class="page-banner">
-    <div class="container">
-      <h1>💬 Community Feed</h1>
-      <p>Share pet stories, tips, and connect with fellow pet lovers</p>
-    </div>
-  </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-5xl lg:mx-auto lg:px-12">
 
-  <div class="container py-5">
-    <div class="community-layout">
+    <h1 class="text-3xl font-headline font-extrabold tracking-tight mb-2 lg:text-4xl">Community Feed</h1>
+    <p class="text-on-surface-variant mb-7">Share pet stories, tips, and connect with fellow pet lovers.</p>
 
-      <!-- ===== MAIN FEED ===== -->
-      <div>
-        <!-- Post Form (shown if logged in) -->
-        <div id="postFormWrapper" class="post-form-card" style="display:none;">
-          <div class="fw-bold mb-3">✍️ Share Something</div>
-          <textarea class="form-control mb-2" id="postContent" rows="3"
-            placeholder="Share a pet story, tip, lost/found alert, or anything pet-related..."></textarea>
-          <div class="d-flex justify-content-between align-items-center">
-            <small class="text-muted"><span id="charCount">500</span> characters left</small>
-            <button class="btn btn-primary-pawmatch btn-sm" id="submitPostBtn">Post</button>
+    <div class="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-start">
+
+      <!-- ── Feed (left / center) ── -->
+      <div class="lg:col-span-2 space-y-5">
+
+        <!-- Post Form (logged in) -->
+        <div id="postFormWrapper" style="display:none;"
+             class="bg-surface-container-lowest rounded-2xl shadow-sm p-5">
+          <p class="font-bold text-sm mb-3">✍️ Share Something</p>
+          <textarea id="postContent" rows="3"
+            class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-on-surface text-sm font-medium resize-none border-none outline-none focus:ring-2 focus:ring-primary/30 placeholder-outline-variant"
+            placeholder="Share a pet story, tip, lost/found alert…"></textarea>
+          <div class="flex justify-between items-center mt-3">
+            <span class="text-xs text-on-surface-variant"><span id="charCount">500</span> characters left</span>
+            <button id="submitPostBtn"
+              class="px-5 py-2 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-primary active:scale-95 transition-all"
+              style="background:linear-gradient(135deg,#964300,#f9873e)">Post</button>
           </div>
-          <small class="text-muted d-block mt-1">💡 Tip: Press Ctrl+Enter to post quickly</small>
+          <p class="text-xs text-on-surface-variant mt-1">💡 Ctrl+Enter to post quickly</p>
         </div>
 
-        <!-- Login prompt (shown if not logged in) -->
-        <div id="loginPrompt" class="alert alert-info mb-4" style="display:none; border-radius:12px;">
-          <a href="./login.html">Login</a> or <a href="./register.html">Register</a> to post in the community.
+        <!-- Login prompt -->
+        <div id="loginPrompt" style="display:none;"
+             class="bg-surface-container-low rounded-2xl p-5 text-sm text-on-surface-variant text-center">
+          <a href="./login.html" class="text-primary font-bold">Login</a> or
+          <a href="./register.html" class="text-primary font-bold">Register</a> to post in the community.
         </div>
 
-        <!-- Posts Container -->
+        <!-- Posts -->
         <div id="postsContainer"></div>
       </div>
 
-      <!-- ===== SIDEBAR ===== -->
-      <div>
-        <!-- Community Tips -->
-        <div class="sidebar-widget">
-          <h6 class="fw-bold mb-3">📋 Community Guidelines</h6>
-          <ul class="list-unstyled" style="font-size:0.85rem; color:#555;">
-            <li class="mb-2">✅ Share pet stories and tips</li>
-            <li class="mb-2">✅ Post lost/found pet alerts</li>
-            <li class="mb-2">✅ Ask for advice from fellow owners</li>
-            <li class="mb-2">❌ No spam or advertisements</li>
-            <li class="mb-2">❌ No harmful or offensive content</li>
+      <!-- ── Sidebar ── -->
+      <aside class="hidden lg:flex flex-col gap-5 mt-8 lg:mt-0 lg:sticky lg:top-28">
+
+        <!-- Guidelines -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm">
+          <h3 class="font-headline font-bold text-base mb-4">Community Guidelines</h3>
+          <ul class="space-y-2 text-sm text-on-surface-variant">
+            <li>✅ Share pet stories and tips</li>
+            <li>✅ Post lost/found pet alerts</li>
+            <li>✅ Ask advice from fellow owners</li>
+            <li>❌ No spam or advertisements</li>
+            <li>❌ No harmful or offensive content</li>
           </ul>
         </div>
 
         <!-- Quick Links -->
-        <div class="sidebar-widget">
-          <h6 class="fw-bold mb-3">🔗 Quick Links</h6>
-          <a href="./pets.html" class="d-block mb-2" style="font-size:0.88rem">🐾 Browse Pets</a>
-          <a href="./pawswipe.html" class="d-block mb-2" style="font-size:0.88rem">🔥 Try PawSwipe</a>
-          <a href="./blog.html" class="d-block mb-2" style="font-size:0.88rem">📝 Read Our Blog</a>
-          <a href="./notices.html" class="d-block mb-2" style="font-size:0.88rem">📢 See Notices</a>
+        <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm flex flex-col gap-2">
+          <h3 class="font-headline font-bold text-base mb-2">Quick Links</h3>
+          <a href="./pets.html" class="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-container-low text-sm font-bold text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-primary text-base">search</span>Browse Pets
+          </a>
+          <a href="./pawswipe.html" class="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-container-low text-sm font-bold text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-primary text-base">style</span>Try PawSwipe
+          </a>
+          <a href="./blog.html" class="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-container-low text-sm font-bold text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-primary text-base">article</span>Read Our Blog
+          </a>
+          <a href="./notices.html" class="flex items-center gap-2 p-2 rounded-lg hover:bg-surface-container-low text-sm font-bold text-on-surface transition-colors">
+            <span class="material-symbols-outlined text-primary text-base">campaign</span>See Notices
+          </a>
         </div>
 
-        <!-- Trending Tags (decorative) -->
-        <div class="sidebar-widget">
-          <h6 class="fw-bold mb-3">🏷️ Popular Topics</h6>
-          <div>
-            <span class="tag-pill">#DogLovers</span>
-            <span class="tag-pill">#CatLife</span>
-            <span class="tag-pill">#Adoption</span>
-            <span class="tag-pill">#PetCare</span>
-            <span class="tag-pill">#LostPet</span>
-            <span class="tag-pill">#BangladeshPets</span>
+        <!-- Tags -->
+        <div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm">
+          <h3 class="font-headline font-bold text-base mb-3">Popular Topics</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#DogLovers</span>
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#CatLife</span>
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#Adoption</span>
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#PetCare</span>
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#LostPet</span>
+            <span class="bg-secondary-container/40 text-on-surface-variant text-xs font-bold px-3 py-1 rounded-full">#BDPets</span>
           </div>
         </div>
-      </div>
+      </aside>
+
     </div>
-  </div>
+  </main>
 
-  <!-- Footer injected by main.js -->
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/community.js"></script>
 </body>

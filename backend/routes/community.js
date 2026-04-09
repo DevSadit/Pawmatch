@@ -1,121 +1,113 @@
 // =============================================
 // Community Routes - /api/community
 // =============================================
-// Handles social feed posts: create, read, delete, like
+// Social feed posts: create, read, delete, like
+// Uses MongoDB Atlas via Mongoose
 // =============================================
 
-const express = require("express");
-const router = express.Router();
-const fs = require("fs");
-const path = require("path");
-
-const communityFile = path.join(__dirname, "../data/community.json");
-
-function getPosts() {
-  const data = fs.readFileSync(communityFile, "utf-8");
-  return JSON.parse(data);
-}
-
-function savePosts(posts) {
-  fs.writeFileSync(communityFile, JSON.stringify(posts, null, 2));
-}
+const express  = require("express");
+const router   = express.Router();
+const mongoose = require("mongoose");
+const Post     = require("../models/Post");
 
 // ---- GET /api/community ----
-// Get all community posts (newest first)
-router.get("/", (req, res) => {
-  const posts = getPosts();
-  // Sort by date descending (newest first)
-  posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  res.json(posts);
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts.map((p) => p.toJSON()));
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- POST /api/community ----
-// Create a new post
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Please login to post" });
   }
 
   const { content, authorName, image } = req.body;
-
   if (!content) {
     return res.status(400).json({ message: "Post content is required" });
   }
 
-  const posts = getPosts();
-
-  const newPost = {
-    id: Date.now(),
-    content,
-    authorId: req.session.userId,
-    authorName: authorName || "Anonymous",
-    image: image || "",
-    likes: 0,
-    likedBy: [], // track who liked
-    createdAt: new Date().toISOString(),
-  };
-
-  posts.push(newPost);
-  savePosts(posts);
-
-  res.status(201).json({ message: "Post created", post: newPost });
+  try {
+    const post = await Post.create({
+      content,
+      authorId:   req.session.userId,
+      authorName: authorName || "Anonymous",
+      image:      image || "",
+    });
+    res.status(201).json({ message: "Post created", post: post.toJSON() });
+  } catch (err) {
+    console.error("POST /community error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- DELETE /api/community/:id ----
-// Delete a post (owner or admin only)
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Please login" });
   }
 
-  const posts = getPosts();
-  const index = posts.findIndex((p) => p.id === parseInt(req.params.id));
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Post not found" });
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    if (
+      post.authorId.toString() !== req.session.userId &&
+      req.session.userRole !== "admin"
+    ) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await post.deleteOne();
+    res.json({ message: "Post deleted" });
+  } catch (err) {
+    console.error("DELETE /community/:id error:", err);
+    res.status(500).json({ message: "Server error" });
   }
-
-  if (
-    posts[index].authorId !== req.session.userId &&
-    req.session.userRole !== "admin"
-  ) {
-    return res.status(403).json({ message: "Not authorized" });
-  }
-
-  posts.splice(index, 1);
-  savePosts(posts);
-
-  res.json({ message: "Post deleted" });
 });
 
 // ---- PUT /api/community/:id/like ----
-// Like or unlike a post (toggle)
-router.put("/:id/like", (req, res) => {
-  const posts = getPosts();
-  const post = posts.find((p) => p.id === parseInt(req.params.id));
+router.put("/:id/like", async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
-  if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    // Accept logged-in user ID or a guest identifier from body
+    const userId = req.session.userId || req.body.guestId;
+    if (!userId) return res.status(400).json({ message: "User id required" });
+
+    const idStr      = userId.toString();
+    const likedIndex = post.likedBy.findIndex((id) => id.toString() === idStr);
+
+    if (likedIndex !== -1) {
+      post.likedBy.splice(likedIndex, 1);
+      post.likes = Math.max(0, post.likes - 1);
+    } else {
+      // Only push a valid ObjectId (skip guest strings)
+      if (mongoose.Types.ObjectId.isValid(userId)) {
+        post.likedBy.push(userId);
+      }
+      post.likes += 1;
+    }
+
+    await post.save();
+    res.json({ message: "Updated", likes: post.likes });
+  } catch (err) {
+    console.error("PUT /community/:id/like error:", err);
+    res.status(500).json({ message: "Server error" });
   }
-
-  const userId = req.session.userId || req.body.guestId;
-
-  if (!post.likedBy) post.likedBy = [];
-
-  const alreadyLiked = post.likedBy.includes(userId);
-
-  if (alreadyLiked) {
-    // Unlike
-    post.likedBy = post.likedBy.filter((id) => id !== userId);
-    post.likes = Math.max(0, post.likes - 1);
-  } else {
-    // Like
-    post.likedBy.push(userId);
-    post.likes += 1;
-  }
-
-  savePosts(posts);
-  res.json({ message: "Updated", likes: post.likes });
 });
 
 module.exports = router;

@@ -35,8 +35,10 @@
     "authorId": 1,
     "authorName": "Admin User",
     "image": "",
-    "likes": 42,
-    "likedBy": [],
+    "likes": 43,
+    "likedBy": [
+      "guest_yppx25bxu"
+    ],
     "createdAt": "2026-04-05T16:00:00.000Z"
   }
 ]

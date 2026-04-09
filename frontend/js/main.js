@@ -1,279 +1,503 @@
 // =============================================
-// PawMatch - Main JavaScript
+// PawMatch - Main JavaScript (Redesigned UI)
 // main.js
 // =============================================
-// This file runs on every page.
-// It handles:
-// - Injecting the shared navbar and footer
-// - Checking if user is logged in
-// - Back-to-top button
-// - Toast notifications
-// =============================================
 
-// ---- API Base URL ----
-// Change this if your backend runs on a different port
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = `${window.location.origin}/api`;
+const LOCAL_USER_KEY = "pawmatch_user";
+const LEGACY_MATCHES_KEY = "pawmatch_saved";
 
-// ---- Get current user from localStorage ----
-// When a user logs in, we store their info in localStorage
-// so we don't have to hit the server for every page load
+let userSyncPromise = null;
+
 function getCurrentUser() {
-  const user = localStorage.getItem("pawmatch_user");
+  const user = localStorage.getItem(LOCAL_USER_KEY);
   return user ? JSON.parse(user) : null;
 }
 
-// ---- Save user to localStorage ----
 function setCurrentUser(user) {
-  localStorage.setItem("pawmatch_user", JSON.stringify(user));
+  if (!user) {
+    clearCurrentUser();
+    return;
+  }
+
+  localStorage.setItem(LOCAL_USER_KEY, JSON.stringify(user));
 }
 
-// ---- Remove user from localStorage (on logout) ----
 function clearCurrentUser() {
-  localStorage.removeItem("pawmatch_user");
+  localStorage.removeItem(LOCAL_USER_KEY);
 }
 
-// =============================================
-// NAVBAR HTML Template
-// =============================================
-function getNavbarHTML(user) {
-  const isLoggedIn = user !== null;
-  const isAdmin = isLoggedIn && user.role === "admin";
-
-  // Determine the base path for links (pages/ vs root)
-  const isInPages = window.location.pathname.includes("/pages/");
-  const base = isInPages ? "../" : "./";
-  const pagesBase = isInPages ? "./" : "./pages/";
-
-  const userMenuHTML = isLoggedIn
-    ? `
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-        data-bs-toggle="dropdown">
-        👤 ${user.name.split(" ")[0]}
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="${pagesBase}dashboard.html">📊 Dashboard</a></li>
-        <li><a class="dropdown-item" href="${pagesBase}profile.html">👤 Profile</a></li>
-        <li><a class="dropdown-item" href="${pagesBase}my-matches.html">💖 My Matches</a></li>
-        <li><a class="dropdown-item" href="${pagesBase}add-pet.html">➕ Add Pet</a></li>
-        <li><a class="dropdown-item" href="${pagesBase}manage-listings.html">🐾 Manage Listings</a></li>
-        ${isAdmin ? '<li><hr class="dropdown-divider"></li><li><a class="dropdown-item text-danger" href="' + pagesBase + 'admin.html">🔑 Admin Panel</a></li>' : ""}
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">🚪 Logout</a></li>
-      </ul>
-    </li>`
-    : `
-    <li class="nav-item">
-      <a class="nav-link btn-nav-login" href="${pagesBase}login.html">Login</a>
-    </li>
-    <li class="nav-item ms-2">
-      <a class="nav-link btn-nav-register" href="${pagesBase}register.html">Register</a>
-    </li>`;
-
-  return `
-  <nav class="navbar navbar-expand-lg navbar-pawmatch">
-    <div class="container">
-      <a class="navbar-brand" href="${base}index.html">🐾 Paw<span>Match</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link" href="${base}index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}pets.html">Browse Pets</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}trade.html">Trade</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}match-finder.html">Match Finder</a></li>
-          <li class="nav-item">
-            <a class="nav-link" href="${pagesBase}pawswipe.html" style="color:#ff6b35 !important; font-weight:700;">🐾 PawSwipe</a>
-          </li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}community.html">Community</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}blog.html">Blog</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}notices.html">Notices</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}faq.html">FAQ</a></li>
-          <li class="nav-item"><a class="nav-link" href="${pagesBase}contact.html">Contact</a></li>
-        </ul>
-        <ul class="navbar-nav align-items-center">
-          ${userMenuHTML}
-        </ul>
-      </div>
-    </div>
-  </nav>`;
-}
-
-// =============================================
-// FOOTER HTML Template
-// =============================================
-function getFooterHTML() {
-  const isInPages = window.location.pathname.includes("/pages/");
-  const base = isInPages ? "../" : "./";
-  const pagesBase = isInPages ? "./" : "./pages/";
-
-  return `
-  <footer class="footer-pawmatch">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4 mb-md-0">
-          <h5>🐾 PawMatch</h5>
-          <p style="color:rgba(255,255,255,0.65); font-size:0.9rem; max-width:280px;">
-            Your one-stop platform for pet adoption, trading, social connection, and the fun PawSwipe experience.
-          </p>
-        </div>
-        <div class="col-md-2 mb-3 mb-md-0">
-          <h5>Discover</h5>
-          <a href="${pagesBase}pets.html">Browse Pets</a>
-          <a href="${pagesBase}pawswipe.html">PawSwipe</a>
-          <a href="${pagesBase}match-finder.html">Match Finder</a>
-          <a href="${pagesBase}trade.html">Trade</a>
-        </div>
-        <div class="col-md-2 mb-3 mb-md-0">
-          <h5>Community</h5>
-          <a href="${pagesBase}community.html">Social Feed</a>
-          <a href="${pagesBase}blog.html">Blog</a>
-          <a href="${pagesBase}notices.html">Notices</a>
-          <a href="${pagesBase}faq.html">FAQ</a>
-        </div>
-        <div class="col-md-2 mb-3 mb-md-0">
-          <h5>Platform</h5>
-          <a href="${pagesBase}about.html">About Us</a>
-          <a href="${pagesBase}contact.html">Contact</a>
-          <a href="${pagesBase}adoption-process.html">Adoption Info</a>
-        </div>
-        <div class="col-md-2">
-          <h5>Account</h5>
-          <a href="${pagesBase}register.html">Register</a>
-          <a href="${pagesBase}login.html">Login</a>
-          <a href="${pagesBase}dashboard.html">Dashboard</a>
-          <a href="${pagesBase}my-matches.html">My Matches</a>
-        </div>
-      </div>
-      <div class="footer-bottom text-center">
-        <p>© 2026 PawMatch. Built with ❤️ for pets everywhere. Academic Project.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Back to Top Button -->
-  <button id="backToTop" title="Back to top">↑</button>`;
-}
-
-// =============================================
-// INJECT NAVBAR AND FOOTER
-// =============================================
-function injectNavbar() {
-  const user = getCurrentUser();
-  const navbarHTML = getNavbarHTML(user);
-
-  // Create a div and insert navbar at the start of body
-  const navContainer = document.createElement("div");
-  navContainer.id = "navbar-container";
-  navContainer.innerHTML = navbarHTML;
-  document.body.insertBefore(navContainer, document.body.firstChild);
-
-  // Highlight active nav link based on current page
-  const currentPage = window.location.pathname.split("/").pop();
-  document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
-    const href = link.getAttribute("href");
-    if (href && href.includes(currentPage) && currentPage !== "") {
-      link.classList.add("active");
-    }
+async function apiFetch(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: "include",
+    ...options,
+    headers,
   });
 
-  // Handle logout button click
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", async (e) => {
-      e.preventDefault();
-      try {
-        await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" });
-      } catch (err) {
-        // Even if server fails, clear local storage
+  const contentType = response.headers.get("content-type") || "";
+  let data = null;
+
+  if (contentType.includes("application/json")) {
+    data = await response.json().catch(() => null);
+  } else {
+    data = await response.text().catch(() => "");
+  }
+
+  if (!response.ok) {
+    const error = new Error(data?.message || response.statusText || "Request failed");
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
+
+  return data;
+}
+
+function isAuthError(error) {
+  return error && (error.status === 401 || error.status === 403);
+}
+
+async function syncCurrentUser({ force = false } = {}) {
+  if (!force && userSyncPromise) {
+    return userSyncPromise;
+  }
+
+  userSyncPromise = apiFetch("/auth/me")
+    .then((user) => {
+      setCurrentUser(user);
+      renderAppChrome();
+      return user;
+    })
+    .catch((error) => {
+      if (isAuthError(error)) {
+        clearCurrentUser();
+        renderAppChrome();
+        return null;
       }
-      clearCurrentUser();
-      showToast("Logged out successfully", "success");
-      setTimeout(() => {
-        const isInPages = window.location.pathname.includes("/pages/");
-        window.location.href = isInPages ? "../index.html" : "./index.html";
-      }, 800);
+
+      throw error;
+    })
+    .finally(() => {
+      userSyncPromise = null;
     });
-  }
+
+  return userSyncPromise;
 }
 
-function injectFooter() {
-  const footerHTML = getFooterHTML();
-  document.body.insertAdjacentHTML("beforeend", footerHTML);
+function getLocalMatches() {
+  return JSON.parse(localStorage.getItem(LEGACY_MATCHES_KEY) || "[]");
+}
 
-  // Back to top functionality
-  const backToTopBtn = document.getElementById("backToTop");
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 400) {
-      backToTopBtn.style.display = "block";
-    } else {
-      backToTopBtn.style.display = "none";
+function setLocalMatches(matches) {
+  localStorage.setItem(LEGACY_MATCHES_KEY, JSON.stringify(matches));
+}
+
+async function syncLegacyMatchesToServer() {
+  const user = await syncCurrentUser();
+  if (!user) return false;
+
+  const legacyMatches = getLocalMatches();
+  if (!legacyMatches.length) return false;
+
+  for (const match of legacyMatches) {
+    if (!match?.id) continue;
+
+    try {
+      await apiFetch("/matches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          petId: match.id,
+          action: match.action === "super-liked" ? "super-liked" : "liked",
+        }),
+      });
+    } catch (error) {
+      if (!isAuthError(error)) {
+        console.error("Could not sync legacy match", error);
+      }
     }
-  });
-
-  backToTopBtn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
-
-// =============================================
-// TOAST NOTIFICATION
-// =============================================
-function showToast(message, type = "info") {
-  // Create toast container if it doesn't exist
-  let toastContainer = document.querySelector(".toast-container");
-  if (!toastContainer) {
-    toastContainer = document.createElement("div");
-    toastContainer.className = "toast-container position-fixed top-0 end-0 p-3";
-    toastContainer.style.zIndex = "9999";
-    document.body.appendChild(toastContainer);
   }
 
-  const bgClass = {
-    success: "bg-success",
-    error: "bg-danger",
-    warning: "bg-warning text-dark",
-    info: "bg-info text-dark",
-  }[type] || "bg-secondary";
+  localStorage.removeItem(LEGACY_MATCHES_KEY);
+  return true;
+}
 
-  const toastId = "toast_" + Date.now();
-  const toastHTML = `
-    <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0 mb-2" role="alert">
-      <div class="d-flex">
-        <div class="toast-body fw-semibold">${message}</div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-      </div>
-    </div>`;
+async function getSavedMatches() {
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
+  if (!user) {
+    return getLocalMatches();
+  }
 
-  toastContainer.insertAdjacentHTML("beforeend", toastHTML);
+  await syncLegacyMatchesToServer();
+  return apiFetch("/matches");
+}
 
-  const toastEl = document.getElementById(toastId);
-  const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-  toast.show();
+async function saveMatch(pet, action = "liked") {
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
 
-  // Remove from DOM after hiding
-  toastEl.addEventListener("hidden.bs.toast", () => toastEl.remove());
+  if (!user) {
+    const matches = getLocalMatches();
+    if (matches.find((match) => match.id === pet.id)) {
+      return { alreadySaved: true, match: null };
+    }
+
+    const stored = {
+      ...pet,
+      action,
+      savedAt: new Date().toISOString(),
+    };
+
+    matches.push(stored);
+    setLocalMatches(matches);
+    return { alreadySaved: false, match: stored };
+  }
+
+  await syncLegacyMatchesToServer();
+
+  const existing = await apiFetch("/matches");
+  const found = existing.find((entry) => entry.pet?.id === pet.id);
+  if (found) {
+    return { alreadySaved: true, match: found };
+  }
+
+  const data = await apiFetch("/matches", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ petId: pet.id, action }),
+  });
+
+  return { alreadySaved: false, match: data.match };
+}
+
+async function removeSavedMatch(petId) {
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
+
+  if (!user) {
+    const filtered = getLocalMatches().filter((match) => match.id !== petId);
+    setLocalMatches(filtered);
+    return true;
+  }
+
+  await apiFetch(`/matches/${petId}`, { method: "DELETE" });
+  return true;
+}
+
+async function clearSavedMatches() {
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
+
+  if (!user) {
+    localStorage.removeItem(LEGACY_MATCHES_KEY);
+    return true;
+  }
+
+  await apiFetch("/matches", { method: "DELETE" });
+  return true;
+}
+
+function normalizeMatchEntries(entries) {
+  return entries.map((entry) => {
+    if (entry.pet) {
+      return {
+        ...entry.pet,
+        action: entry.action,
+        savedAt: entry.savedAt,
+      };
+    }
+
+    return entry;
+  });
 }
 
 // =============================================
-// UTILITY FUNCTIONS (Used across pages)
+// NAV CSS - injected once into <head>
 // =============================================
+const NAV_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
 
-// Format a date string nicely
+  .pm-top-bar {
+    position: fixed; top: 0; width: 100%; z-index: 50;
+    background: rgba(248,246,242,0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: none; box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+  }
+  .pm-top-bar-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 24px; max-width: 1280px; margin: 0 auto;
+  }
+  .pm-logo {
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; transition: transform 0.2s;
+  }
+  .pm-logo:active { transform: scale(0.93); }
+  .pm-logo-icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 26px; color: #c2410c;
+    font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+  }
+  .pm-logo-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 900; font-style: italic; font-size: 1.45rem;
+    color: #b45309; letter-spacing: -0.02em;
+  }
+  .pm-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    overflow: hidden; border: 2px solid #f9873e;
+    display: flex; align-items: center; justify-content: center;
+    background: #e9e8e4; text-decoration: none; cursor: pointer;
+  }
+  .pm-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pm-avatar-initials {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 0.95rem; color: #964300;
+  }
+  .pm-avatar-login {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.7rem; font-weight: 700; color: #964300;
+    text-align: center; line-height: 1.2;
+    text-decoration: none;
+  }
+
+  .pm-top-nav {
+    display: none;
+    align-items: center;
+    gap: 2px;
+  }
+  .pm-top-nav-link {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 0.875rem; font-weight: 600;
+    color: #5b5c59; text-decoration: none;
+    padding: 7px 14px; border-radius: 9999px;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .pm-top-nav-link:hover { color: #2e2f2d; background: rgba(0,0,0,0.05); }
+  .pm-top-nav-link.pm-active {
+    color: #964300; background: rgba(254,215,170,0.65);
+    font-weight: 700;
+  }
+
+  .pm-bottom-nav {
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 16px 24px;
+    background: rgba(248,246,242,0.92);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-radius: 48px 48px 0 0; z-index: 50;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.06);
+  }
+  .pm-nav-tab {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-decoration: none;
+    color: #78716c; border-radius: 9999px; padding: 8px 12px;
+    transition: all 0.25s; gap: 2px;
+  }
+  .pm-nav-tab:hover { color: #9a3412; }
+  .pm-nav-tab.pm-active {
+    background: rgba(254,215,170,0.7); color: #9a3412;
+    padding: 8px 20px;
+  }
+  .pm-nav-icon {
+    font-family: 'Material Symbols Outlined', sans-serif; font-size: 24px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: block;
+  }
+  .pm-nav-tab.pm-active .pm-nav-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  }
+  .pm-nav-label {
+    font-family: 'Be Vietnam Pro', sans-serif; font-size: 9px;
+    text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+  }
+
+  .pm-toast-container {
+    position: fixed; top: 76px; right: 16px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+  }
+  .pm-toast {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border-radius: 16px; min-width: 240px;
+    font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.88rem;
+    font-weight: 600; color: #2e2f2d; pointer-events: all;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    animation: pm-toast-in 0.3s ease; backdrop-filter: blur(12px);
+  }
+  .pm-toast.pm-toast-out { animation: pm-toast-out 0.3s ease forwards; }
+  .pm-toast-success { background: rgba(220,252,231,0.95); border-left: 4px solid #22c55e; }
+  .pm-toast-error   { background: rgba(254,226,226,0.95); border-left: 4px solid #ef4444; }
+  .pm-toast-info    { background: rgba(224,242,254,0.95); border-left: 4px solid #3b82f6; }
+  .pm-toast-warning { background: rgba(254,249,195,0.95); border-left: 4px solid #eab308; }
+  @keyframes pm-toast-in  { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes pm-toast-out { to   { opacity:0; transform:translateX(40px); } }
+
+  @media (min-width: 1024px) {
+    .pm-top-nav { display: flex; }
+    .pm-top-bar-inner { padding: 16px 40px; }
+    .pm-logo-text { font-size: 1.6rem; }
+    .pm-avatar { width: 44px; height: 44px; }
+    .pm-bottom-nav { display: none !important; }
+    body { padding-bottom: 0 !important; }
+  }
+`;
+
+function injectNavStyles() {
+  if (document.getElementById("pm-nav-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "pm-nav-style";
+  style.textContent = NAV_CSS;
+  document.head.appendChild(style);
+
+  if (!document.querySelector('link[href*="Material+Symbols"]')) {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap";
+    document.head.appendChild(link);
+  }
+}
+
+function getTopBarHTML(user) {
+  const isInPages = window.location.pathname.includes("/pages/");
+  const base = isInPages ? "../" : "./";
+  const pagesBase = isInPages ? "./" : "./pages/";
+  const dashLink = user ? `${pagesBase}dashboard.html` : `${pagesBase}login.html`;
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+  const navTabs = [
+    { label: "Home", href: `${base}index.html`, active: ["index.html", ""] },
+    { label: "Browse", href: `${pagesBase}pets.html`, active: ["pets.html", "pet-details.html"] },
+    { label: "PawSwipe", href: `${pagesBase}pawswipe.html`, active: ["pawswipe.html", "my-matches.html", "match-finder.html"] },
+    { label: "Forum", href: `${pagesBase}community.html`, active: ["community.html", "blog.html", "notices.html"] },
+    { label: "Account", href: dashLink, active: ["dashboard.html", "profile.html", "login.html", "register.html", "admin.html"] },
+  ];
+
+  const navLinksHTML = navTabs
+    .map((tab) => {
+      const isActive = tab.active.includes(currentPage);
+      return `<a href="${tab.href}" class="pm-top-nav-link${isActive ? " pm-active" : ""}">${tab.label}</a>`;
+    })
+    .join("");
+
+  const avatarHTML = user
+    ? `<a href="${dashLink}" class="pm-avatar" title="${user.name}">
+         <span class="pm-avatar-initials">${user.name.charAt(0).toUpperCase()}</span>
+       </a>`
+    : `<a href="${dashLink}" class="pm-avatar pm-avatar-login">Login</a>`;
+
+  return `
+  <header class="pm-top-bar">
+    <div class="pm-top-bar-inner">
+      <a href="${base}index.html" class="pm-logo">
+        <span class="pm-logo-icon">pets</span>
+        <span class="pm-logo-text">PawMatch</span>
+      </a>
+      <nav class="pm-top-nav" aria-label="Main navigation">
+        ${navLinksHTML}
+      </nav>
+      ${avatarHTML}
+    </div>
+  </header>`;
+}
+
+function getBottomNavHTML() {
+  const isInPages = window.location.pathname.includes("/pages/");
+  const base = isInPages ? "../" : "./";
+  const pagesBase = isInPages ? "./" : "./pages/";
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+  const tabs = [
+    { icon: "home", label: "Home", href: `${base}index.html`, active: ["index.html", ""] },
+    { icon: "search", label: "Browse", href: `${pagesBase}pets.html`, active: ["pets.html", "pet-details.html"] },
+    { icon: "style", label: "Swipe", href: `${pagesBase}pawswipe.html`, active: ["pawswipe.html", "my-matches.html", "match-finder.html"] },
+    { icon: "groups", label: "Forum", href: `${pagesBase}community.html`, active: ["community.html", "blog.html", "notices.html"] },
+    { icon: "person", label: "Account", href: `${pagesBase}dashboard.html`, active: ["dashboard.html", "profile.html", "admin.html"] },
+  ];
+
+  const tabsHTML = tabs
+    .map((tab) => {
+      const isActive = tab.active.includes(currentPage);
+      return `<a href="${tab.href}" class="pm-nav-tab${isActive ? " pm-active" : ""}">
+        <span class="pm-nav-icon">${tab.icon}</span>
+        <span class="pm-nav-label">${tab.label}</span>
+      </a>`;
+    })
+    .join("");
+
+  return `<nav class="pm-bottom-nav">${tabsHTML}</nav>`;
+}
+
+function renderAppChrome() {
+  injectNavStyles();
+  const user = getCurrentUser();
+
+  let topBarContainer = document.getElementById("pm-top-bar-container");
+  if (!topBarContainer) {
+    topBarContainer = document.createElement("div");
+    topBarContainer.id = "pm-top-bar-container";
+    document.body.insertBefore(topBarContainer, document.body.firstChild);
+  }
+  topBarContainer.innerHTML = getTopBarHTML(user);
+
+  let bottomNavContainer = document.getElementById("pm-bottom-nav-container");
+  if (!bottomNavContainer) {
+    bottomNavContainer = document.createElement("div");
+    bottomNavContainer.id = "pm-bottom-nav-container";
+    document.body.appendChild(bottomNavContainer);
+  }
+  bottomNavContainer.innerHTML = getBottomNavHTML();
+}
+
+function showToast(message, type = "info") {
+  let container = document.querySelector(".pm-toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "pm-toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = `pm-toast pm-toast-${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("pm-toast-out");
+    setTimeout(() => toast.remove(), 320);
+  }, 3000);
+}
+
+function initLogout() {
+  document.addEventListener("click", async (event) => {
+    if (!event.target.closest("#pm-logout-btn")) return;
+
+    event.preventDefault();
+
+    try {
+      await apiFetch("/auth/logout", { method: "POST" });
+    } catch {}
+
+    clearCurrentUser();
+    renderAppChrome();
+    showToast("Logged out successfully", "success");
+
+    setTimeout(() => {
+      const isInPages = window.location.pathname.includes("/pages/");
+      window.location.href = isInPages ? "../index.html" : "./index.html";
+    }, 800);
+  });
+}
+
 function formatDate(dateString) {
   if (!dateString) return "";
-  const d = new Date(dateString);
-  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
-// Format time ago (e.g., "2 hours ago")
 function timeAgo(dateString) {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diff = now - date;
-
+  const diff = Date.now() - new Date(dateString);
   const seconds = Math.floor(diff / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -286,26 +510,17 @@ function timeAgo(dateString) {
   return formatDate(dateString);
 }
 
-// Capitalize first letter
 function capitalize(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Get badge color class based on pet status
 function getStatusBadgeClass(status) {
-  const map = {
-    Adoption: "success",
-    Sale: "warning",
-    Rehome: "info",
-  };
-  return map[status] || "secondary";
+  return { Adoption: "success", Sale: "warning", Rehome: "info" }[status] || "secondary";
 }
 
-// =============================================
-// INITIALIZE ON PAGE LOAD
-// =============================================
 document.addEventListener("DOMContentLoaded", function () {
-  injectNavbar();
-  injectFooter();
+  renderAppChrome();
+  initLogout();
+  syncCurrentUser().catch(() => {});
 });

@@ -1,131 +1,186 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Browse Pets – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "on-primary-container":     "#451b00",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "secondary-fixed":          "#7cf6ec",
+            "on-secondary-container":   "#005c57",
+            "tertiary":                 "#aa2c32",
+            "on-tertiary":              "#ffefee",
+            "tertiary-container":       "#ff928e",
+            "on-tertiary-container":    "#69000f",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
   <style>
-    .filter-card {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      border: 1px solid #e8e8e8;
-      margin-bottom: 30px;
-    }
-    .info-detail-box {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 12px;
-    }
-    .info-detail-label {
-      font-size: 0.75rem;
-      color: #888;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .info-detail-value {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .custom-scrollbar::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body>
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <!-- Page Banner -->
-  <div class="page-banner">
-    <div class="container">
-      <h1>🐾 Browse Pets</h1>
-      <p>Find your perfect companion from our listings</p>
-    </div>
-  </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-7xl lg:mx-auto lg:px-12">
 
-  <div class="container pb-5">
-    <!-- ---- Filter Bar ---- -->
-    <div class="filter-card">
-      <div class="row g-3 align-items-end">
-        <div class="col-md-4">
-          <label class="form-label fw-semibold mb-1">🔍 Search</label>
-          <input type="text" class="form-control" id="searchInput"
-            placeholder="Search by name or breed..." />
+    <!-- ── Search Bar ── -->
+    <section class="mb-6 lg:mb-8">
+      <div class="relative lg:max-w-2xl">
+        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+          <span class="material-symbols-outlined text-outline">search</span>
         </div>
-        <div class="col-md-2">
-          <label class="form-label fw-semibold mb-1">Type</label>
-          <select class="form-select" id="typeFilter">
-            <option value="">All Types</option>
-            <option value="Dog">🐶 Dog</option>
-            <option value="Cat">🐱 Cat</option>
-            <option value="Rabbit">🐰 Rabbit</option>
-            <option value="Bird">🐦 Bird</option>
-            <option value="Fish">🐠 Fish</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label fw-semibold mb-1">Status</label>
-          <select class="form-select" id="statusFilter">
-            <option value="">All</option>
-            <option value="Adoption">Adoption</option>
-            <option value="Sale">For Sale</option>
-            <option value="Rehome">Rehome</option>
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label fw-semibold mb-1">Location</label>
-          <input type="text" class="form-control" id="locationFilter" placeholder="e.g. Dhaka" />
-        </div>
-        <div class="col-md-2">
-          <label class="form-label fw-semibold mb-1">Sort By</label>
-          <select class="form-select" id="sortPets">
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-            <option value="name-asc">Name A-Z</option>
-            <option value="name-desc">Name Z-A</option>
-          </select>
-        </div>
+        <input id="searchInput"
+          class="w-full bg-surface-container-lowest border-none rounded-2xl py-4 pl-12 pr-4 shadow-sm text-on-surface placeholder-outline-variant font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-secondary-container/50"
+          placeholder="Search for your future best friend..."
+          type="text"/>
       </div>
-      <div class="mt-3 d-flex gap-2">
-        <button class="btn btn-primary-pawmatch" id="applyFilters">Apply Filters</button>
-        <button class="btn btn-outline-secondary" id="resetFilters">Reset</button>
-      </div>
-    </div>
+    </section>
 
-    <!-- Result Count -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <span class="text-muted fw-semibold" id="petsCount"></span>
-      <a href="./add-pet.html" class="btn btn-sm btn-outline-pawmatch">+ List a Pet</a>
+    <!-- ── Filter Chips ── -->
+    <section class="mb-8 -mx-6 overflow-x-auto custom-scrollbar lg:mx-0 lg:overflow-visible">
+      <div class="flex gap-3 px-6 lg:px-0 lg:flex-wrap">
+        <!-- Type filter chips -->
+        <button data-type="" onclick="setActiveChip(this,'type')"
+          class="chip-type chip-active flex items-center gap-2 bg-secondary-container text-on-secondary-container px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">pets</span>All
+        </button>
+        <button data-type="Dog" onclick="setActiveChip(this,'type')"
+          class="chip-type flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">pets</span>Dog
+        </button>
+        <button data-type="Cat" onclick="setActiveChip(this,'type')"
+          class="chip-type flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">cruelty_free</span>Cat
+        </button>
+        <button data-type="Bird" onclick="setActiveChip(this,'type')"
+          class="chip-type flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">flutter_dash</span>Bird
+        </button>
+        <button data-type="Rabbit" onclick="setActiveChip(this,'type')"
+          class="chip-type flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-base">cruelty_free</span>Rabbit
+        </button>
+
+        <!-- Divider -->
+        <div class="w-px bg-outline-variant/30 mx-1 self-stretch"></div>
+
+        <!-- Status filter chips -->
+        <button data-status="" onclick="setActiveChip(this,'status')"
+          class="chip-status chip-status-active flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap active:scale-95 transition-all">
+          Any Status
+        </button>
+        <button data-status="Adoption" onclick="setActiveChip(this,'status')"
+          class="chip-status flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          Adoption
+        </button>
+        <button data-status="Sale" onclick="setActiveChip(this,'status')"
+          class="chip-status flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          For Sale
+        </button>
+        <button data-status="Rehome" onclick="setActiveChip(this,'status')"
+          class="chip-status flex items-center gap-2 bg-surface-container-high text-on-surface-variant px-5 py-2.5 rounded-full font-label font-bold text-sm whitespace-nowrap hover:bg-secondary-container/40 active:scale-95 transition-all">
+          Rehome
+        </button>
+      </div>
+    </section>
+
+    <!-- Result Count + Add Listing -->
+    <div class="flex justify-between items-center mb-5 lg:mb-7">
+      <span class="text-on-surface-variant text-sm font-medium lg:text-base" id="petsCount"></span>
+      <a href="./add-pet.html"
+         class="flex items-center gap-1 text-primary font-bold text-sm font-label active:scale-95 transition-transform">
+        <span class="material-symbols-outlined text-base">add_circle</span>List a Pet
+      </a>
     </div>
 
     <!-- Loading Spinner -->
-    <div id="petsLoading" class="loading-spinner" style="display:flex;">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+    <div id="petsLoading" class="flex justify-center py-16" style="display:flex;">
+      <div class="w-10 h-10 border-4 border-primary-container border-t-primary rounded-full animate-spin"></div>
     </div>
 
-    <!-- Pets Grid -->
-    <div class="row pets-grid" id="petsContainer"></div>
-  </div>
+    <!-- Pet Grid: 1 col mobile → 2 col md → 3 col lg -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8" id="petsContainer"></div>
 
-  <!-- Footer injected by main.js -->
+    <!-- Hidden filter fields (for JS compatibility) -->
+    <input type="hidden" id="typeFilter" value="">
+    <input type="hidden" id="statusFilter" value="">
+    <input type="hidden" id="locationFilter" value="">
+    <input type="hidden" id="sortPets" value="newest">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  </main>
+
   <script src="../js/main.js"></script>
   <script src="../js/pets.js"></script>
-
   <script>
-    // Check for type filter in URL params (from home page category links)
+    // Chip logic
+    function setActiveChip(btn, group) {
+      const cls = group === "type" ? ".chip-type" : ".chip-status";
+      const activeCls = group === "type" ? "chip-active" : "chip-status-active";
+      document.querySelectorAll(cls).forEach(c => {
+        c.classList.remove("bg-secondary-container","text-on-secondary-container","chip-active","chip-status-active");
+        c.classList.add("bg-surface-container-high","text-on-surface-variant");
+      });
+      btn.classList.remove("bg-surface-container-high","text-on-surface-variant");
+      btn.classList.add("bg-secondary-container","text-on-secondary-container", activeCls);
+
+      const hiddenField = group === "type" ? document.getElementById("typeFilter") : document.getElementById("statusFilter");
+      if (hiddenField) hiddenField.value = btn.dataset[group] || "";
+
+      applyFiltersFromChips();
+    }
+
+    function applyFiltersFromChips() {
+      loadPets({
+        search:   document.getElementById("searchInput")?.value.trim() || "",
+        type:     document.getElementById("typeFilter")?.value || "",
+        status:   document.getElementById("statusFilter")?.value || "",
+        location: document.getElementById("locationFilter")?.value.trim() || "",
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
+      // URL param type pre-select
       const urlParams = new URLSearchParams(window.location.search);
       const typeParam = urlParams.get("type");
       if (typeParam) {
-        const typeFilter = document.getElementById("typeFilter");
-        if (typeFilter) typeFilter.value = typeParam;
+        const btn = document.querySelector(`.chip-type[data-type="${typeParam}"]`);
+        if (btn) setActiveChip(btn, "type");
+      }
+
+      // Live search
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+        searchInput.addEventListener("input", () => applyFiltersFromChips());
+        searchInput.addEventListener("keydown", e => { if (e.key === "Enter") applyFiltersFromChips(); });
       }
     });
   </script>

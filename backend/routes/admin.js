@@ -1,19 +1,18 @@
 // =============================================
 // Admin Routes - /api/admin
 // =============================================
-// Admin-only endpoints for moderation
+// Admin-only moderation endpoints
+// Uses MongoDB Atlas via Mongoose
 // =============================================
 
-const express = require("express");
-const router = express.Router();
-const fs = require("fs");
-const path = require("path");
+const express  = require("express");
+const router   = express.Router();
+const mongoose = require("mongoose");
+const User     = require("../models/User");
+const Pet      = require("../models/Pet");
+const Post     = require("../models/Post");
 
-const usersFile = path.join(__dirname, "../data/users.json");
-const petsFile = path.join(__dirname, "../data/pets.json");
-const communityFile = path.join(__dirname, "../data/community.json");
-
-// Middleware: Check if user is admin
+// Middleware: admin only
 function requireAdmin(req, res, next) {
   if (!req.session.userId || req.session.userRole !== "admin") {
     return res.status(403).json({ message: "Admin access required" });
@@ -22,70 +21,91 @@ function requireAdmin(req, res, next) {
 }
 
 // ---- GET /api/admin/stats ----
-// Dashboard stats
-router.get("/stats", requireAdmin, (req, res) => {
-  const users = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
-  const pets = JSON.parse(fs.readFileSync(petsFile, "utf-8"));
-  const posts = JSON.parse(fs.readFileSync(communityFile, "utf-8"));
+router.get("/stats", requireAdmin, async (req, res) => {
+  try {
+    const [totalUsers, totalPets, totalPosts, adoptionPets, salePets, rehomePets] =
+      await Promise.all([
+        User.countDocuments(),
+        Pet.countDocuments(),
+        Post.countDocuments(),
+        Pet.countDocuments({ status: "Adoption" }),
+        Pet.countDocuments({ status: "Sale" }),
+        Pet.countDocuments({ status: "Rehome" }),
+      ]);
 
-  res.json({
-    totalUsers: users.length,
-    totalPets: pets.length,
-    totalPosts: posts.length,
-    adoptionPets: pets.filter((p) => p.status === "Adoption").length,
-    salePets: pets.filter((p) => p.status === "Sale").length,
-    rehomePets: pets.filter((p) => p.status === "Rehome").length,
-  });
+    res.json({ totalUsers, totalPets, totalPosts, adoptionPets, salePets, rehomePets });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- GET /api/admin/users ----
-// Get all users
-router.get("/users", requireAdmin, (req, res) => {
-  const users = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
-  // Remove passwords before sending
-  const safeUsers = users.map(({ password, ...u }) => u);
-  res.json(safeUsers);
+router.get("/users", requireAdmin, async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 });
+    res.json(users.map((u) => u.toJSON()));
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- DELETE /api/admin/users/:id ----
-// Delete a user
-router.delete("/users/:id", requireAdmin, (req, res) => {
-  const users = JSON.parse(fs.readFileSync(usersFile, "utf-8"));
-  const filtered = users.filter((u) => u.id !== parseInt(req.params.id));
-  fs.writeFileSync(usersFile, JSON.stringify(filtered, null, 2));
-  res.json({ message: "User deleted" });
+router.delete("/users/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: "User deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- GET /api/admin/pets ----
-// Get all pets (admin view)
-router.get("/pets", requireAdmin, (req, res) => {
-  const pets = JSON.parse(fs.readFileSync(petsFile, "utf-8"));
-  res.json(pets);
+router.get("/pets", requireAdmin, async (req, res) => {
+  try {
+    const pets = await Pet.find().sort({ createdAt: -1 });
+    res.json(pets.map((p) => p.toJSON()));
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- DELETE /api/admin/pets/:id ----
-// Force delete any pet listing
-router.delete("/pets/:id", requireAdmin, (req, res) => {
-  const pets = JSON.parse(fs.readFileSync(petsFile, "utf-8"));
-  const filtered = pets.filter((p) => p.id !== parseInt(req.params.id));
-  fs.writeFileSync(petsFile, JSON.stringify(filtered, null, 2));
-  res.json({ message: "Pet listing removed" });
+router.delete("/pets/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+    await Pet.findByIdAndDelete(req.params.id);
+    res.json({ message: "Pet listing removed" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- GET /api/admin/posts ----
-// Get all community posts
-router.get("/posts", requireAdmin, (req, res) => {
-  const posts = JSON.parse(fs.readFileSync(communityFile, "utf-8"));
-  res.json(posts);
+router.get("/posts", requireAdmin, async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts.map((p) => p.toJSON()));
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // ---- DELETE /api/admin/posts/:id ----
-// Delete any community post
-router.delete("/posts/:id", requireAdmin, (req, res) => {
-  const posts = JSON.parse(fs.readFileSync(communityFile, "utf-8"));
-  const filtered = posts.filter((p) => p.id !== parseInt(req.params.id));
-  fs.writeFileSync(communityFile, JSON.stringify(filtered, null, 2));
-  res.json({ message: "Post deleted" });
+router.delete("/posts/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    await Post.findByIdAndDelete(req.params.id);
+    res.json({ message: "Post deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 module.exports = router;

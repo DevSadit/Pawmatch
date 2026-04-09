@@ -1,51 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Matches – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "tertiary":                 "#aa2c32",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
+  <style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
 </head>
-<body>
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <div class="page-banner">
-    <div class="container">
-      <h1>💖 My Matches</h1>
-      <p>Pets you've liked through PawSwipe</p>
-    </div>
-  </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-7xl lg:mx-auto lg:px-12">
 
-  <div class="container pb-5">
     <!-- Header row -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="flex justify-between items-center mb-7">
       <div>
-        <span class="text-muted fw-semibold"><span id="matchesCount">0</span> saved matches</span>
+        <h1 class="text-3xl font-headline font-extrabold tracking-tight lg:text-4xl">My Matches</h1>
+        <p class="text-on-surface-variant text-sm mt-1"><span id="matchesCount">0</span> saved matches</p>
       </div>
-      <div class="d-flex gap-2">
-        <a href="./pawswipe.html" class="btn btn-primary-pawmatch btn-sm">🐾 Continue Swiping</a>
-        <button class="btn btn-outline-danger btn-sm" id="clearAllMatches">🗑️ Clear All</button>
+      <div class="flex gap-3">
+        <a href="./pawswipe.html"
+           class="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-primary active:scale-95 transition-all"
+           style="background:linear-gradient(135deg,#964300,#f9873e)">
+          <span class="material-symbols-outlined text-sm">style</span>Swipe
+        </a>
+        <button id="clearAllMatches"
+          class="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-label font-bold text-xs uppercase tracking-widest text-error bg-red-50 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-sm">delete</span>Clear All
+        </button>
       </div>
     </div>
 
     <!-- Empty state -->
-    <div id="matchesEmpty" style="display:none;" class="text-center py-5">
-      <div style="font-size:5rem">💔</div>
-      <h4 class="mt-3">No matches yet</h4>
-      <p class="text-muted">Go to PawSwipe and start liking pets!</p>
-      <a href="./pawswipe.html" class="btn btn-primary-pawmatch">🐾 Start PawSwiping</a>
+    <div id="matchesEmpty" style="display:none;" class="text-center py-20">
+      <span style="font-size:5rem">💔</span>
+      <h4 class="font-headline font-bold text-xl mt-4 mb-2">No matches yet</h4>
+      <p class="text-on-surface-variant mb-6">Go to PawSwipe and start liking pets!</p>
+      <a href="./pawswipe.html"
+         class="inline-block px-8 py-3 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-primary"
+         style="background:linear-gradient(135deg,#964300,#f9873e)">🐾 Start PawSwiping</a>
     </div>
 
-    <!-- Matches Grid (filled by JS) -->
-    <div class="row" id="matchesContainer"></div>
-  </div>
+    <!-- Grid (filled by JS) -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8" id="matchesContainer"></div>
 
-  <!-- Footer injected by main.js -->
+  </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/my-matches.js"></script>
 </body>

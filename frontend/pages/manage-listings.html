@@ -1,130 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manage Listings – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
+  <style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
 </head>
-<body style="background:#f8f9fa;">
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <div class="page-banner">
-    <div class="container">
-      <h1>🐾 Manage Listings</h1>
-      <p>View, edit, and delete your pet listings</p>
-    </div>
-  </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-7xl lg:mx-auto lg:px-12">
 
-  <div class="container py-5">
-    <!-- Header Row -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header row -->
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-7">
       <div>
-        <span class="text-muted fw-semibold"><span id="listingCount">0</span> listings found</span>
+        <h1 class="text-3xl font-headline font-extrabold tracking-tight lg:text-4xl">Manage Listings</h1>
+        <p class="text-on-surface-variant text-sm mt-1"><span id="listingCount">0</span> listings</p>
       </div>
-      <div class="d-flex gap-2">
-        <input type="text" class="form-control form-control-sm" id="listingSearch"
-          placeholder="Search listings..." style="width:200px;" />
-        <a href="./add-pet.html" class="btn btn-primary-pawmatch btn-sm">➕ Add New Pet</a>
+      <div class="flex gap-3 items-center">
+        <input type="text" id="listingSearch" placeholder="Search listings…"
+          class="bg-surface-container-lowest rounded-xl px-4 py-2.5 text-sm font-medium border-none outline-none shadow-sm focus:ring-2 focus:ring-primary/30 w-48" />
+        <a href="./add-pet.html"
+           class="flex items-center gap-1.5 px-5 py-2.5 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-primary active:scale-95 transition-all"
+           style="background:linear-gradient(135deg,#964300,#f9873e)">
+          <span class="material-symbols-outlined text-sm">add</span>Add Pet
+        </a>
       </div>
     </div>
 
-    <!-- Listings Table (filled by JS) -->
+    <!-- Listings (filled by JS) -->
     <div id="listingsContainer"></div>
-  </div>
 
-  <!-- ===== EDIT MODAL ===== -->
-  <div class="modal fade modal-dashboard" id="editModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" style="border-radius:20px;">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold">✏️ Edit Pet Listing</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="editPetId" />
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Pet Name</label>
-              <input type="text" class="form-control" id="editPetName" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Type</label>
-              <select class="form-select" id="editPetType">
-                <option value="Dog">Dog</option>
-                <option value="Cat">Cat</option>
-                <option value="Rabbit">Rabbit</option>
-                <option value="Bird">Bird</option>
-                <option value="Fish">Fish</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Breed</label>
-              <input type="text" class="form-control" id="editPetBreed" />
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Age</label>
-              <input type="text" class="form-control" id="editPetAge" />
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Gender</label>
-              <select class="form-select" id="editPetGender">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Unknown">Unknown</option>
-              </select>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Location</label>
-              <input type="text" class="form-control" id="editPetLocation" />
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Status</label>
-              <select class="form-select" id="editPetStatus">
-                <option value="Adoption">Adoption</option>
-                <option value="Rehome">Rehome</option>
-                <option value="Sale">Sale</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-semibold">Price (৳)</label>
-              <input type="number" class="form-control" id="editPetPrice" min="0" />
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold">Description</label>
-              <textarea class="form-control" id="editPetDescription" rows="3"></textarea>
-            </div>
-            <div class="col-12">
-              <label class="form-label fw-semibold">Image URL</label>
-              <input type="url" class="form-control" id="editPetImage" />
-            </div>
-            <div class="col-12">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="editPetVaccinated" />
-                <label class="form-check-label" for="editPetVaccinated">Vaccinated</label>
-              </div>
-            </div>
+  </main>
+
+  <!-- ===== Edit Modal (custom, no Bootstrap) ===== -->
+  <div id="editModal" style="display:none;"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4"
+       onclick="if(event.target===this)closeEditModal()">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    <div class="relative bg-surface-container-lowest rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto z-10">
+      <!-- Header -->
+      <div class="flex justify-between items-center p-6 pb-4 border-b border-surface-container">
+        <h2 class="font-headline font-bold text-xl">Edit Pet Listing</h2>
+        <button onclick="closeEditModal()"
+          class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+      <!-- Body -->
+      <div class="p-6 space-y-4">
+        <input type="hidden" id="editPetId" />
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Pet Name</label>
+            <input type="text" id="editPetName"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Type</label>
+            <select id="editPetType"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Rabbit">Rabbit</option>
+              <option value="Bird">Bird</option>
+              <option value="Fish">Fish</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Breed</label>
+            <input type="text" id="editPetBreed"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Age</label>
+            <input type="text" id="editPetAge"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Gender</label>
+            <select id="editPetGender"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Unknown">Unknown</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Location</label>
+            <input type="text" id="editPetLocation"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Status</label>
+            <select id="editPetStatus"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+              <option value="Adoption">Adoption</option>
+              <option value="Rehome">Rehome</option>
+              <option value="Sale">Sale</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Price (৳)</label>
+            <input type="number" id="editPetPrice" min="0"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary-pawmatch" id="saveEditBtn" onclick="submitEdit()">
-            Save Changes
-          </button>
+        <div>
+          <label class="block text-sm font-bold mb-1.5">Description</label>
+          <textarea id="editPetDescription" rows="3"
+            class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium resize-none border-none outline-none focus:ring-2 focus:ring-primary/30"></textarea>
         </div>
+        <div>
+          <label class="block text-sm font-bold mb-1.5">Image URL</label>
+          <input type="url" id="editPetImage"
+            class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30" />
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+          <input type="checkbox" id="editPetVaccinated" class="w-4 h-4 accent-primary rounded" />
+          Vaccinated
+        </label>
+      </div>
+      <!-- Footer -->
+      <div class="flex justify-end gap-3 p-6 pt-4 border-t border-surface-container">
+        <button onclick="closeEditModal()"
+          class="px-6 py-2.5 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-surface-variant bg-surface-container-high active:scale-95 transition-all">
+          Cancel
+        </button>
+        <button id="saveEditBtn" onclick="submitEdit()"
+          class="px-6 py-2.5 rounded-full font-label font-bold text-xs uppercase tracking-widest text-on-primary active:scale-95 transition-all"
+          style="background:linear-gradient(135deg,#964300,#f9873e)">
+          Save Changes
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Footer injected by main.js -->
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/crud.js"></script>
+  <script>
+    function closeEditModal() {
+      document.getElementById("editModal").style.display = "none";
+    }
+  </script>
 </body>
 </html>

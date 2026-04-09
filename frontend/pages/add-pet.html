@@ -1,167 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add Pet Listing – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
+  <style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
 </head>
-<body>
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <div class="page-banner">
-    <div class="container">
-      <h1>➕ Add Pet Listing</h1>
-      <p>List a pet for adoption, sale, or rehoming</p>
-    </div>
-  </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-2xl lg:mx-auto lg:px-8">
 
-  <div class="container py-5">
-    <!-- Login required message (shown by JS if not logged in) -->
-    <div id="loginRequiredMsg" style="display:none;" class="text-center py-5">
-      <div style="font-size:3rem;">🔒</div>
-      <h4 class="mt-3">Login Required</h4>
-      <p class="text-muted">You must be logged in to add a pet listing.</p>
-      <a href="./login.html" class="btn btn-primary-pawmatch">Login Now</a>
+    <h1 class="text-3xl font-headline font-extrabold tracking-tight mb-7">Add Pet Listing</h1>
+
+    <!-- Login required -->
+    <div id="loginRequiredMsg" style="display:none;" class="text-center py-16">
+      <span class="material-symbols-outlined text-outline text-6xl">lock</span>
+      <h4 class="font-headline font-bold text-xl mt-4 mb-2">Login Required</h4>
+      <p class="text-on-surface-variant mb-5">You must be logged in to add a pet listing.</p>
+      <a href="./login.html"
+         class="inline-block px-8 py-3 rounded-full font-label font-bold text-sm uppercase tracking-widest text-on-primary"
+         style="background:linear-gradient(135deg,#964300,#f9873e)">Login Now</a>
     </div>
 
-    <!-- Add Pet Form -->
+    <!-- Form -->
     <div id="formWrapper">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="info-box">
-            <h5 class="fw-bold mb-4">🐾 Pet Information</h5>
-            <form id="addPetForm" class="form-pawmatch" novalidate>
+      <div class="bg-surface-container-lowest rounded-2xl shadow-sm p-6 space-y-5">
+        <form id="addPetForm" novalidate class="space-y-5">
 
-              <!-- Row 1 -->
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Pet Name *</label>
-                  <input type="text" class="form-control" id="petName" placeholder="e.g. Bella" required />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Pet Type *</label>
-                  <select class="form-select" id="petType" required>
-                    <option value="">Select type</option>
-                    <option value="Dog">🐶 Dog</option>
-                    <option value="Cat">🐱 Cat</option>
-                    <option value="Rabbit">🐰 Rabbit</option>
-                    <option value="Bird">🐦 Bird</option>
-                    <option value="Fish">🐠 Fish</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Row 2 -->
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Breed *</label>
-                  <input type="text" class="form-control" id="petBreed" placeholder="e.g. Golden Retriever" required />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Age</label>
-                  <input type="text" class="form-control" id="petAge" placeholder="e.g. 2 years" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Gender</label>
-                  <select class="form-select" id="petGender">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Unknown">Unknown</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Row 3 -->
-              <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                  <label class="form-label">Location</label>
-                  <input type="text" class="form-control" id="petLocation" placeholder="e.g. Dhaka" />
-                </div>
-                <div class="col-md-6">
-                  <label class="form-label">Listing Status *</label>
-                  <select class="form-select" id="petStatus" required>
-                    <option value="Adoption">💖 Adoption (Free)</option>
-                    <option value="Rehome">🏠 Rehome</option>
-                    <option value="Sale">💰 For Sale</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Price (shown only for Sale) -->
-              <div class="mb-3" id="priceGroup" style="display:none;">
-                <label class="form-label">Price (৳)</label>
-                <input type="number" class="form-control" id="petPrice" placeholder="0" min="0" />
-              </div>
-
-              <!-- Row 4 -->
-              <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                  <label class="form-label">Energy Level</label>
-                  <select class="form-select" id="petEnergy">
-                    <option value="Low">🛋️ Low</option>
-                    <option value="Medium" selected>🚶 Medium</option>
-                    <option value="High">🏃 High</option>
-                  </select>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label">Ideal Home Type</label>
-                  <select class="form-select" id="petHomeType">
-                    <option value="Any">Any</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="House">House</option>
-                    <option value="Large Property">Large Property</option>
-                  </select>
-                </div>
-                <div class="col-md-4 d-flex align-items-end gap-3">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="petVaccinated" />
-                    <label class="form-check-label" for="petVaccinated">Vaccinated</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="petKids" />
-                    <label class="form-check-label" for="petKids">Good with Kids</label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Description -->
-              <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" id="petDescription" rows="4"
-                  placeholder="Describe the pet's personality, history, and why they need a new home..."></textarea>
-              </div>
-
-              <!-- Image URL -->
-              <div class="mb-4">
-                <label class="form-label">Pet Photo URL</label>
-                <input type="url" class="form-control" id="petImage"
-                  placeholder="https://example.com/pet-photo.jpg" />
-                <small class="text-muted">Paste a direct link to the pet's photo</small>
-              </div>
-
-              <div class="d-flex gap-3">
-                <button type="submit" class="btn btn-primary-pawmatch btn-lg flex-fill">
-                  🐾 Submit Listing
-                </button>
-                <a href="./manage-listings.html" class="btn btn-outline-secondary btn-lg">
-                  Cancel
-                </a>
-              </div>
-            </form>
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Pet Name *</label>
+              <input type="text" id="petName" required
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+                placeholder="e.g. Bella" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Pet Type *</label>
+              <select id="petType" required
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="">Select type</option>
+                <option value="Dog">🐶 Dog</option>
+                <option value="Cat">🐱 Cat</option>
+                <option value="Rabbit">🐰 Rabbit</option>
+                <option value="Bird">🐦 Bird</option>
+                <option value="Fish">🐠 Fish</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
           </div>
-        </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div class="sm:col-span-1">
+              <label class="block text-sm font-bold mb-1.5">Breed *</label>
+              <input type="text" id="petBreed" required
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+                placeholder="e.g. Golden Retriever" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Age</label>
+              <input type="text" id="petAge"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+                placeholder="e.g. 2 years" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Gender</label>
+              <select id="petGender"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Unknown">Unknown</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Location</label>
+              <input type="text" id="petLocation"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+                placeholder="e.g. Dhaka" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Listing Status *</label>
+              <select id="petStatus" required
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="Adoption">💖 Adoption (Free)</option>
+                <option value="Rehome">🏠 Rehome</option>
+                <option value="Sale">💰 For Sale</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Price (only shown for Sale) -->
+          <div id="priceGroup" style="display:none;">
+            <label class="block text-sm font-bold mb-1.5">Price (৳)</label>
+            <input type="number" id="petPrice" min="0"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+              placeholder="0" />
+          </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Energy Level</label>
+              <select id="petEnergy"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="Low">🛋️ Low</option>
+                <option value="Medium" selected>🚶 Medium</option>
+                <option value="High">🏃 High</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5">Ideal Home Type</label>
+              <select id="petHomeType"
+                class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30">
+                <option value="Any">Any</option>
+                <option value="Apartment">Apartment</option>
+                <option value="House">House</option>
+                <option value="Large Property">Large Property</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex gap-6">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="checkbox" id="petVaccinated" class="w-4 h-4 accent-primary rounded" />
+              Vaccinated
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+              <input type="checkbox" id="petKids" class="w-4 h-4 accent-primary rounded" />
+              Good with Kids
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Description</label>
+            <textarea id="petDescription" rows="4"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium resize-none border-none outline-none focus:ring-2 focus:ring-primary/30"
+              placeholder="Describe the pet's personality, history, and why they need a new home…"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold mb-1.5">Pet Photo URL</label>
+            <input type="url" id="petImage"
+              class="w-full bg-surface-container-low rounded-xl px-4 py-3 text-sm font-medium border-none outline-none focus:ring-2 focus:ring-primary/30"
+              placeholder="https://example.com/pet-photo.jpg" />
+            <p class="text-xs text-on-surface-variant mt-1">Paste a direct link to the pet's photo</p>
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button type="submit"
+              class="flex-1 py-3.5 rounded-full font-label font-bold text-sm uppercase tracking-widest text-on-primary shadow-md active:scale-95 transition-all"
+              style="background:linear-gradient(135deg,#964300,#f9873e)">
+              🐾 Submit Listing
+            </button>
+            <a href="./manage-listings.html"
+               class="flex-shrink-0 px-6 py-3.5 rounded-full font-label font-bold text-sm uppercase tracking-widest text-on-surface-variant bg-surface-container-high active:scale-95 transition-all">
+              Cancel
+            </a>
+          </div>
+
+        </form>
       </div>
     </div>
-  </div>
 
-  <!-- Footer injected by main.js -->
+  </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/crud.js"></script>
 </body>

@@ -2,17 +2,12 @@
 // PawMatch - CRUD Operations JavaScript
 // crud.js
 // =============================================
-// Handles Create, Read, Update, Delete for
-// pet listings (Add Pet + Manage Listings pages)
-// =============================================
 
-// ---- ADD PET PAGE ----
-function initAddPetPage() {
+async function initAddPetPage() {
   const form = document.getElementById("addPetForm");
   if (!form) return;
 
-  // Check if user is logged in
-  const user = getCurrentUser();
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
   if (!user) {
     const formWrapper = document.getElementById("formWrapper");
     const loginMsg = document.getElementById("loginRequiredMsg");
@@ -21,8 +16,8 @@ function initAddPetPage() {
     return;
   }
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
@@ -45,7 +40,6 @@ function initAddPetPage() {
       homeType: document.getElementById("petHomeType").value,
     };
 
-    // Validate required fields
     if (!petData.name || !petData.type || !petData.breed || !petData.status) {
       showToast("Please fill in all required fields", "warning");
       submitBtn.disabled = false;
@@ -54,53 +48,45 @@ function initAddPetPage() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/pets`, {
+      await apiFetch("/pets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify(petData),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        showToast("Pet listing created successfully! 🎉", "success");
-        form.reset();
-        setTimeout(() => {
-          window.location.href = "./manage-listings.html";
-        }, 1500);
-      } else {
-        showToast(data.message || "Failed to create listing", "error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Listing";
-      }
-    } catch (err) {
-      showToast("Server error. Please try again.", "error");
+      showToast("Pet listing created successfully!", "success");
+      form.reset();
+      setTimeout(() => {
+        window.location.href = "./manage-listings.html";
+      }, 1200);
+    } catch (error) {
+      showToast(error?.message || "Failed to create listing", "error");
       submitBtn.disabled = false;
       submitBtn.textContent = "Submit Listing";
     }
   });
 
-  // Toggle price field based on status
   const statusSelect = document.getElementById("petStatus");
   const priceGroup = document.getElementById("priceGroup");
   if (statusSelect && priceGroup) {
     statusSelect.addEventListener("change", function () {
       priceGroup.style.display = this.value === "Sale" ? "block" : "none";
     });
+    priceGroup.style.display = statusSelect.value === "Sale" ? "block" : "none";
   }
 }
 
-// ---- MANAGE LISTINGS PAGE ----
 async function initManageListingsPage() {
   const container = document.getElementById("listingsContainer");
   if (!container) return;
 
-  const user = getCurrentUser();
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
   if (!user) {
     container.innerHTML = `
-      <div class="text-center py-5">
-        <h5>Please <a href="./login.html">login</a> to manage your listings.</h5>
+      <div class="rounded-[1.75rem] bg-surface-container-lowest p-10 text-center shadow-sm">
+        <h3 class="font-headline text-2xl font-extrabold text-on-surface">Please login first</h3>
+        <p class="mt-2 text-sm text-on-surface-variant">Login to create, edit, or remove your pet listings.</p>
+        <a href="./login.html" class="mt-5 inline-block rounded-full bg-gradient-to-br from-primary to-primary-container px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-on-primary">Login</a>
       </div>`;
     return;
   }
@@ -110,134 +96,104 @@ async function initManageListingsPage() {
 
 async function loadUserListings() {
   const container = document.getElementById("listingsContainer");
-  const user = getCurrentUser();
+  const countEl = document.getElementById("listingCount");
+  const searchInput = document.getElementById("listingSearch");
+  const user = await syncCurrentUser().catch(() => getCurrentUser());
+
   if (!container || !user) return;
 
   container.innerHTML = `
-    <div class="loading-spinner">
-      <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
+    <div class="flex justify-center py-16">
+      <div class="h-10 w-10 animate-spin rounded-full border-4 border-primary-container border-t-primary"></div>
     </div>`;
 
   try {
-    const response = await fetch(`${API_BASE}/pets`, { credentials: "include" });
-    const allPets = await response.json();
-
-    // Filter to only this user's pets (or all if admin)
-    const userPets = user.role === "admin"
+    const allPets = await apiFetch("/pets");
+    const ownPets = user.role === "admin"
       ? allPets
-      : allPets.filter((p) => p.owner === user.id);
+      : allPets.filter((pet) => pet.owner === user.id || pet.owner === user._id);
 
-    if (userPets.length === 0) {
+    const query = searchInput?.value.trim().toLowerCase() || "";
+    const filteredPets = query
+      ? ownPets.filter((pet) => `${pet.name} ${pet.breed}`.toLowerCase().includes(query))
+      : ownPets;
+
+    if (countEl) countEl.textContent = filteredPets.length;
+
+    if (!filteredPets.length) {
       container.innerHTML = `
-        <div class="text-center py-5">
-          <div style="font-size:3rem">🐾</div>
-          <h5 class="mt-3">No listings yet</h5>
-          <p class="text-muted">Start by adding your first pet listing.</p>
-          <a href="./add-pet.html" class="btn btn-primary-pawmatch">+ Add Pet</a>
+        <div class="rounded-[1.75rem] bg-surface-container-lowest p-10 text-center shadow-sm">
+          <div class="mb-3 text-5xl">No listings yet</div>
+          <h3 class="font-headline text-2xl font-extrabold text-on-surface">Nothing to manage yet</h3>
+          <p class="mt-2 text-sm text-on-surface-variant">Create your first listing and it will appear here.</p>
+          <a href="./add-pet.html" class="mt-5 inline-block rounded-full bg-gradient-to-br from-primary to-primary-container px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-on-primary">Add Pet</a>
         </div>`;
       return;
     }
 
-    // Search/filter for own listings
-    const searchInput = document.getElementById("listingSearch");
-    let filteredPets = userPets;
+    container.innerHTML = filteredPets
+      .map((pet) => `
+        <article id="listing-row-${pet.id}" class="mb-5 overflow-hidden rounded-[1.75rem] bg-surface-container-lowest shadow-sm lg:grid lg:grid-cols-[220px,1fr]">
+          <img
+            src="${pet.image}"
+            alt="${pet.name}"
+            class="h-56 w-full object-cover lg:h-full"
+            onerror="this.src='https://placehold.co/400x260/f0f0f0/aaa?text=No+Image'"
+          >
+          <div class="space-y-5 p-5">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h2 class="font-headline text-2xl font-extrabold text-on-surface">${pet.name}</h2>
+                <p class="mt-1 text-sm text-on-surface-variant">${pet.type} · ${pet.breed}</p>
+              </div>
+              <span class="rounded-full bg-surface-container-low px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-on-surface-variant">${pet.status}</span>
+            </div>
 
-    if (searchInput && searchInput.value) {
-      const q = searchInput.value.toLowerCase();
-      filteredPets = userPets.filter(
-        (p) => p.name.toLowerCase().includes(q) || p.breed.toLowerCase().includes(q)
-      );
-    }
+            <div class="flex flex-wrap gap-2 text-xs font-bold text-on-surface-variant">
+              <span class="rounded-full bg-surface-container-low px-3 py-1">${pet.location || "Unknown location"}</span>
+              <span class="rounded-full bg-surface-container-low px-3 py-1">${pet.status === "Sale" ? `BDT ${Number(pet.price || 0).toLocaleString()}` : "Free / Contact"}</span>
+              <span class="rounded-full bg-surface-container-low px-3 py-1">${formatDate(pet.createdAt)}</span>
+            </div>
 
-    // Build table
-    container.innerHTML = `
-      <div class="table-responsive table-dashboard">
-        <table class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Pet</th>
-              <th>Type / Breed</th>
-              <th>Status</th>
-              <th>Location</th>
-              <th>Price</th>
-              <th>Date Added</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="listingsTableBody">
-          </tbody>
-        </table>
-      </div>`;
+            <p class="text-sm leading-7 text-on-surface-variant">${pet.description || "No description added yet."}</p>
 
-    const tbody = document.getElementById("listingsTableBody");
-
-    filteredPets.forEach((pet) => {
-      const tr = document.createElement("tr");
-      tr.id = `listing-row-${pet.id}`;
-      tr.innerHTML = `
-        <td>
-          <div class="d-flex align-items-center gap-2">
-            <img src="${pet.image}" alt="${pet.name}" style="width:44px;height:44px;border-radius:10px;object-fit:cover;"
-              onerror="this.src='https://placehold.co/50x50/f0f0f0/aaa?text=?'">
-            <strong>${pet.name}</strong>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="openEditModal('${pet.id}')" class="rounded-full bg-surface-container-high px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-on-surface">Edit</button>
+              <button onclick="deleteListing('${pet.id}')" class="rounded-full bg-red-50 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-error">Delete</button>
+              <a href="./pet-details.html?id=${pet.id}" class="rounded-full bg-gradient-to-br from-primary to-primary-container px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-on-primary">View</a>
+            </div>
           </div>
-        </td>
-        <td>${pet.type} / ${pet.breed}</td>
-        <td><span class="badge bg-${getStatusBadgeClass(pet.status)}">${pet.status}</span></td>
-        <td>📍 ${pet.location}</td>
-        <td>${pet.status === "Sale" ? "৳ " + pet.price.toLocaleString() : "Free"}</td>
-        <td>${formatDate(pet.createdAt)}</td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary btn-table-action" onclick="openEditModal(${pet.id})">✏️ Edit</button>
-          <button class="btn btn-sm btn-outline-danger btn-table-action" onclick="deleteListing(${pet.id})">🗑️ Delete</button>
-          <a href="./pet-details.html?id=${pet.id}" class="btn btn-sm btn-outline-secondary btn-table-action">👁️ View</a>
-        </td>`;
-      tbody.appendChild(tr);
-    });
-
-    // Count display
-    const countEl = document.getElementById("listingCount");
-    if (countEl) countEl.textContent = filteredPets.length;
-  } catch (err) {
-    container.innerHTML = `<div class="alert alert-danger">Could not load listings. Is server running?</div>`;
+        </article>`)
+      .join("");
+  } catch (error) {
+    container.innerHTML = `<div class="rounded-3xl bg-red-50 p-8 text-center text-error">${error?.message || "Could not load listings."}</div>`;
   }
 }
 
-// ---- Delete a listing ----
 async function deleteListing(petId) {
   if (!confirm("Are you sure you want to delete this listing?")) return;
 
   try {
-    const response = await fetch(`${API_BASE}/pets/${petId}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-
-    if (response.ok) {
-      const row = document.getElementById(`listing-row-${petId}`);
-      if (row) {
-        row.style.opacity = "0";
-        row.style.transition = "opacity 0.3s";
-        setTimeout(() => {
-          row.remove();
-          showToast("Listing deleted", "success");
-        }, 300);
-      }
+    await apiFetch(`/pets/${petId}`, { method: "DELETE" });
+    const row = document.getElementById(`listing-row-${petId}`);
+    if (row) {
+      row.style.opacity = "0";
+      row.style.transform = "scale(0.98)";
+      row.style.transition = "all 0.3s ease";
+      setTimeout(() => loadUserListings(), 300);
     } else {
-      showToast("Could not delete listing", "error");
+      loadUserListings();
     }
-  } catch (err) {
-    showToast("Server error", "error");
+    showToast("Listing deleted", "success");
+  } catch (error) {
+    showToast(error?.message || "Could not delete listing", "error");
   }
 }
 
-// ---- Open Edit Modal ----
 async function openEditModal(petId) {
   try {
-    const response = await fetch(`${API_BASE}/pets/${petId}`);
-    const pet = await response.json();
+    const pet = await apiFetch(`/pets/${petId}`);
 
-    // Populate modal form fields
     document.getElementById("editPetId").value = pet.id;
     document.getElementById("editPetName").value = pet.name;
     document.getElementById("editPetType").value = pet.type;
@@ -246,20 +202,18 @@ async function openEditModal(petId) {
     document.getElementById("editPetGender").value = pet.gender;
     document.getElementById("editPetLocation").value = pet.location;
     document.getElementById("editPetStatus").value = pet.status;
-    document.getElementById("editPetPrice").value = pet.price;
-    document.getElementById("editPetDescription").value = pet.description;
-    document.getElementById("editPetImage").value = pet.image;
-    document.getElementById("editPetVaccinated").checked = pet.vaccinated;
+    document.getElementById("editPetPrice").value = pet.price || 0;
+    document.getElementById("editPetDescription").value = pet.description || "";
+    document.getElementById("editPetImage").value = pet.image || "";
+    document.getElementById("editPetVaccinated").checked = Boolean(pet.vaccinated);
 
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById("editModal"));
-    modal.show();
-  } catch (err) {
-    showToast("Could not load pet data", "error");
+    const modal = document.getElementById("editModal");
+    if (modal) modal.style.display = "flex";
+  } catch (error) {
+    showToast(error?.message || "Could not load pet data", "error");
   }
 }
 
-// ---- Submit Edit Form ----
 async function submitEdit() {
   const petId = document.getElementById("editPetId").value;
   const submitBtn = document.getElementById("saveEditBtn");
@@ -284,22 +238,17 @@ async function submitEdit() {
   };
 
   try {
-    const response = await fetch(`${API_BASE}/pets/${petId}`, {
+    await apiFetch(`/pets/${petId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify(updatedData),
     });
 
-    if (response.ok) {
-      bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
-      showToast("Listing updated successfully! ✅", "success");
-      loadUserListings(); // Refresh the table
-    } else {
-      showToast("Could not update listing", "error");
-    }
-  } catch (err) {
-    showToast("Server error", "error");
+    if (typeof closeEditModal === "function") closeEditModal();
+    await loadUserListings();
+    showToast("Listing updated successfully!", "success");
+  } catch (error) {
+    showToast(error?.message || "Could not update listing", "error");
   } finally {
     if (submitBtn) {
       submitBtn.disabled = false;
@@ -308,12 +257,10 @@ async function submitEdit() {
   }
 }
 
-// ---- Initialize ----
 document.addEventListener("DOMContentLoaded", function () {
   initAddPetPage();
   initManageListingsPage();
 
-  // Listing search
   const searchInput = document.getElementById("listingSearch");
   if (searchInput) {
     searchInput.addEventListener("input", loadUserListings);

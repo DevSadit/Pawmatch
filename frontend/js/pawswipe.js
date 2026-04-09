@@ -85,28 +85,31 @@ function createSwipeCard(pet) {
   card.dataset.petData = JSON.stringify(pet);
 
   card.innerHTML = `
-    <!-- LIKE / NOPE overlay labels (shown while dragging) -->
-    <div class="swipe-label swipe-label-like" id="label-like-${pet.id}">LIKE 💚</div>
-    <div class="swipe-label swipe-label-nope" id="label-nope-${pet.id}">NOPE ❌</div>
+    <div class="swipe-label swipe-label-like" id="label-like-${pet.id}">LIKE</div>
+    <div class="swipe-label swipe-label-nope" id="label-nope-${pet.id}">NOPE</div>
+
+    <div class="swipe-distance-badge">
+      <span class="material-symbols-outlined" style="font-size:12px;font-variation-settings:'FILL' 1">location_on</span>
+      ${pet.location || "Nearby"}
+    </div>
 
     <img class="swipe-card-img"
       src="${pet.image}"
       alt="${pet.name}"
-      onerror="this.src='https://placehold.co/400x300/f0f0f0/aaa?text=No+Image'"
+      onerror="this.src='https://placehold.co/400x520/e9e8e4/aaa?text=No+Image'"
       draggable="false">
 
     <div class="swipe-card-info">
       <div class="swipe-card-name">
         ${pet.name}
-        <span class="swipe-card-age">${pet.age}</span>
+        <span class="swipe-card-age">, ${pet.age}</span>
       </div>
-      <div class="swipe-card-breed">${pet.breed}</div>
-      <div class="swipe-card-location">📍 ${pet.location}</div>
+      <div class="swipe-card-breed">${pet.breed || pet.type}</div>
       <div class="swipe-card-badges">
         <span class="swipe-badge swipe-badge-type">${pet.type}</span>
-        <span class="swipe-badge swipe-badge-energy">⚡ ${pet.energyLevel}</span>
-        ${pet.vaccinated ? '<span class="swipe-badge" style="background:#e8f5e9;color:#2e7d32">✅ Vaccinated</span>' : ""}
-        ${pet.goodWithKids ? '<span class="swipe-badge" style="background:#e3f2fd;color:#1565c0">👶 Kid-friendly</span>' : ""}
+        ${pet.energyLevel ? `<span class="swipe-badge swipe-badge-energy">${pet.energyLevel}</span>` : ""}
+        ${pet.vaccinated ? '<span class="swipe-badge swipe-badge-type">✓ Vaccinated</span>' : ""}
+        ${pet.goodWithKids ? '<span class="swipe-badge swipe-badge-energy">Kid-friendly</span>' : ""}
       </div>
     </div>`;
 
@@ -183,7 +186,7 @@ function dragEnd(e) {
 }
 
 // ---- Swipe Right: Like this pet ----
-function swipeRight() {
+async function swipeRight() {
   const container = document.getElementById("swipeContainer");
   const topCard = container.lastElementChild;
   if (!topCard) return;
@@ -193,8 +196,14 @@ function swipeRight() {
   // Animate the card flying to the right
   topCard.classList.add("swiped-right");
 
-  // Save to localStorage matches
-  savePetToMatches(pet);
+  try {
+    const result = await savePetToMatches(pet);
+    if (result?.alreadySaved) {
+      showToast(`${pet.name} is already in your matches!`, "info");
+    }
+  } catch (error) {
+    showToast(error?.message || "Could not save this match", "error");
+  }
 
   // Check if it's a strong match (example: dog + high energy = match)
   const user = getCurrentUser();
@@ -238,13 +247,17 @@ function swipeLeft() {
 }
 
 // ---- Super Like ----
-function superLike() {
+async function superLike() {
   const container = document.getElementById("swipeContainer");
   const topCard = container.lastElementChild;
   if (!topCard) return;
 
   const pet = JSON.parse(topCard.dataset.petData);
-  savePetToMatches(pet, "super-liked");
+  try {
+    await savePetToMatches(pet, "super-liked");
+  } catch (error) {
+    showToast(error?.message || "Could not save this match", "error");
+  }
 
   showToast(`⭐ Super Liked ${pet.name}!`, "success");
   showMatchPopup(pet, true);
@@ -267,19 +280,9 @@ function viewCurrentPet() {
   window.location.href = `./pet-details.html?id=${pet.id}`;
 }
 
-// ---- Save pet to localStorage ----
+// ---- Save pet to backend or local fallback ----
 function savePetToMatches(pet, action = "liked") {
-  const matches = JSON.parse(localStorage.getItem("pawmatch_saved") || "[]");
-  const alreadySaved = matches.find((m) => m.id === pet.id);
-
-  if (!alreadySaved) {
-    matches.push({
-      ...pet,
-      action,
-      savedAt: new Date().toISOString(),
-    });
-    localStorage.setItem("pawmatch_saved", JSON.stringify(matches));
-  }
+  return saveMatch(pet, action);
 }
 
 // ---- Show Match Popup ----

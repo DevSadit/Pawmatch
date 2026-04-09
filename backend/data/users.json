@@ -26,5 +26,19 @@
       "homeType": "Apartment"
     },
     "createdAt": "2026-01-05T10:00:00.000Z"
+  },
+  {
+    "id": 1775709776261,
+    "name": "Jane E",
+    "email": "jane@e.com",
+    "password": "password123",
+    "role": "user",
+    "avatar": "",
+    "preferences": {
+      "petType": "",
+      "energy": "",
+      "homeType": ""
+    },
+    "createdAt": "2026-04-09T04:42:56.261Z"
   }
 ]

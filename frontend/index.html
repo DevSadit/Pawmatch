@@ -1,451 +1,567 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PawMatch – Find Your Perfect Pet</title>
-
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- PawMatch Custom CSS -->
-  <link rel="stylesheet" href="./css/style.css" />
-  <link rel="stylesheet" href="./css/responsive.css" />
-
-  <style>
-    /* ---- Additional Home Page Styles ---- */
-    .feature-icon-box {
-      background: white;
-      border-radius: 20px;
-      padding: 30px 24px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-      border: 1px solid #f0f0f0;
-      transition: transform 0.3s ease, box-shadow 0.3s;
-      height: 100%;
-    }
-    .feature-icon-box:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-    .feature-icon-box .icon {
-      font-size: 2.5rem;
-      margin-bottom: 14px;
-      display: block;
-    }
-    .feature-icon-box h5 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .feature-icon-box p {
-      color: #6c757d;
-      font-size: 0.85rem;
-      margin: 0;
-    }
-    .testimonial-card {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-      border: 1px solid #f0f0f0;
-    }
-    .testimonial-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b35, #ff8c5a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: white;
-      font-weight: 700;
-    }
-    .pawswipe-cta {
-      background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
-      border-radius: 24px;
-      padding: 60px 40px;
-      text-align: center;
-      color: white;
-    }
-    .category-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: white;
-      border: 1.5px solid #e8e8e8;
-      border-radius: 50px;
-      padding: 10px 22px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #333;
-      text-decoration: none;
-      transition: all 0.25s;
-      margin: 6px;
-    }
-    .category-pill:hover {
-      border-color: #ff6b35;
-      color: #ff6b35;
-      background: #fff3ef;
-      transform: translateY(-2px);
-    }
-    .scroll-indicator {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: bounce 2s infinite;
-      color: rgba(255,255,255,0.6);
-      font-size: 1.5rem;
-    }
-  </style>
-</head>
-<body>
-  <!-- Navbar injected by main.js -->
-
-  <!-- ======================== HERO SECTION ======================== -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <h1>Find Your <span>Perfect</span><br>Furry Friend 🐾</h1>
-          <p class="my-4">
-            Adopt, trade, and match with pets in the most fun way possible.
-            Try PawSwipe — our Tinder-style pet discovery experience!
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PawMatch – Find Your Perfect Pet</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f2f1ec",
+              "surface-container": "#e9e8e4",
+              "surface-container-high": "#e3e2de",
+              "surface-container-highest": "#deddd8",
+              surface: "#f8f6f2",
+              "on-surface": "#2e2f2d",
+              "on-surface-variant": "#5b5c59",
+              primary: "#964300",
+              "primary-container": "#f9873e",
+              "on-primary": "#fff0e9",
+              "on-primary-container": "#451b00",
+              secondary: "#006761",
+              "secondary-container": "#7cf6ec",
+              "secondary-fixed": "#7cf6ec",
+              "on-secondary-container": "#005c57",
+              tertiary: "#aa2c32",
+              "on-tertiary": "#ffefee",
+              "tertiary-container": "#ff928e",
+              "on-tertiary-container": "#69000f",
+              outline: "#777774",
+              "outline-variant": "#aeadaa",
+              error: "#b02500",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Be Vietnam Pro"],
+              label: ["Plus Jakarta Sans"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-surface font-body text-on-surface pb-32">
+    <main class="mt-20 px-4 lg:px-8 lg:max-w-7xl lg:mx-auto">
+      <!-- ── Hero Section ── -->
+      <section
+        class="relative overflow-hidden rounded-xl bg-surface-container-low p-6 flex flex-col gap-6 mb-10 lg:flex-row lg:items-stretch lg:gap-0 lg:p-0 lg:min-h-[420px]"
+      >
+        <!-- Text column -->
+        <div
+          class="relative z-10 flex flex-col gap-4 lg:flex-1 lg:p-12 lg:justify-center"
+        >
+          <h1
+            class="text-4xl font-extrabold font-headline text-on-primary-container leading-tight lg:text-5xl"
+          >
+            Find Your Perfect Furry Companion
+          </h1>
+          <p
+            class="text-on-surface-variant font-body text-base lg:text-lg lg:max-w-md"
+          >
+            Experience the joy of a lifelong bond in our curated pet sanctuary.
           </p>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="./pages/pets.html" class="btn btn-primary-pawmatch btn-lg">Browse Pets →</a>
-            <a href="./pages/pawswipe.html" class="btn btn-outline-pawmatch btn-lg" style="border-color:white; color:white;">
-              🐾 Try PawSwipe
+          <div class="flex flex-col gap-3 mt-2 lg:flex-row lg:flex-wrap">
+            <a
+              href="./pages/pets.html"
+              class="bg-gradient-to-br from-primary to-primary-container text-on-primary font-label font-bold py-4 px-8 rounded-full flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform text-sm uppercase tracking-widest lg:w-auto"
+            >
+              <span>Browse Pets</span>
+              <span class="material-symbols-outlined text-lg"
+                >arrow_forward</span
+              >
+            </a>
+            <a
+              href="./pages/pawswipe.html"
+              class="bg-surface-container-highest text-on-surface font-label font-bold py-4 px-8 rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform text-sm uppercase tracking-widest lg:w-auto"
+            >
+              <span>Start PawSwipe</span>
+              <span class="material-symbols-outlined text-lg">style</span>
             </a>
           </div>
-          <div class="d-flex gap-4 mt-4">
+          <div class="flex gap-8 mt-2 lg:gap-12">
             <div>
-              <div class="fw-bold text-white" style="font-size:1.4rem" id="heroStatPets">12+</div>
-              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Pets Listed</div>
+              <div
+                class="font-headline font-black text-2xl text-primary lg:text-3xl"
+                id="heroStatPets"
+              >
+                12+
+              </div>
+              <div
+                class="text-on-surface-variant text-xs font-medium lg:text-sm"
+              >
+                Pets Listed
+              </div>
             </div>
             <div>
-              <div class="fw-bold text-white" style="font-size:1.4rem">500+</div>
-              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Happy Families</div>
+              <div
+                class="font-headline font-black text-2xl text-primary lg:text-3xl"
+              >
+                500+
+              </div>
+              <div
+                class="text-on-surface-variant text-xs font-medium lg:text-sm"
+              >
+                Happy Families
+              </div>
             </div>
             <div>
-              <div class="fw-bold text-white" style="font-size:1.4rem">50+</div>
-              <div style="color:rgba(255,255,255,0.6); font-size:0.8rem">Shelters</div>
+              <div
+                class="font-headline font-black text-2xl text-primary lg:text-3xl"
+              >
+                50+
+              </div>
+              <div
+                class="text-on-surface-variant text-xs font-medium lg:text-sm"
+              >
+                Shelters
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-lg-6 text-center d-none d-lg-block">
-          <span class="hero-emoji">🐶</span>
-          <p style="color:rgba(255,255,255,0.5); margin-top:10px; font-size:0.85rem">
-            Swipe right to find your best friend
-          </p>
+        <!-- Hero Image — stacks below on mobile, fills right column on desktop -->
+        <div
+          class="relative -mx-6 -mb-6 h-52 overflow-hidden rounded-t-[3rem] bg-gradient-to-br from-primary-container to-primary flex items-center justify-center lg:flex-1 lg:mx-0 lg:mb-0 lg:rounded-none lg:rounded-r-xl lg:h-auto lg:min-h-full"
+        >
+          <span
+            style="
+              font-size: 6rem;
+              animation: float 3s ease-in-out infinite;
+              display: block;
+            "
+            >🐶</span
+          >
         </div>
-      </div>
-    </div>
-    <a href="#featured" class="scroll-indicator text-decoration-none">↓</a>
-  </section>
+      </section>
 
-  <!-- ======================== STATS ======================== -->
-  <section class="stats-section">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-number">12+</div>
-            <div class="stat-label">Pets Listed</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-number">500+</div>
-            <div class="stat-label">Happy Adoptions</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-number">5</div>
-            <div class="stat-label">Pet Types</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-box">
-            <div class="stat-number">4★</div>
-            <div class="stat-label">Average Rating</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================== FEATURED PETS ======================== -->
-  <section class="py-5" id="featured">
-    <div class="container">
-      <div class="section-title">
-        <h2>Featured Pets 🐾</h2>
-        <div class="title-underline"></div>
-        <p>These adorable animals are waiting for their forever home</p>
-      </div>
-
-      <!-- Loading state -->
-      <div id="featuredLoading" class="loading-spinner">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-
-      <!-- Pets grid (filled by JavaScript) -->
-      <div class="row pets-grid" id="featuredPetsGrid"></div>
-
-      <div class="text-center mt-4">
-        <a href="./pages/pets.html" class="btn btn-primary-pawmatch">
-          See All Pets →
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================== BROWSE BY CATEGORY ======================== -->
-  <section class="py-5 bg-white">
-    <div class="container">
-      <div class="section-title">
-        <h2>Browse by Category</h2>
-        <div class="title-underline"></div>
-        <p>Find the perfect type of pet for your lifestyle</p>
-      </div>
-      <div class="text-center">
-        <a href="./pages/pets.html?type=Dog" class="category-pill">🐶 Dogs</a>
-        <a href="./pages/pets.html?type=Cat" class="category-pill">🐱 Cats</a>
-        <a href="./pages/pets.html?type=Rabbit" class="category-pill">🐰 Rabbits</a>
-        <a href="./pages/pets.html?type=Bird" class="category-pill">🐦 Birds</a>
-        <a href="./pages/pets.html?type=Fish" class="category-pill">🐠 Fish</a>
-        <a href="./pages/pets.html" class="category-pill">🐾 All Pets</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================== PAWSWIPE CTA ======================== -->
-  <section class="py-5 bg-light-custom">
-    <div class="container">
-      <div class="pawswipe-cta">
-        <div style="font-size:4rem; margin-bottom:16px; animation: float 3s ease-in-out infinite;">🐾</div>
-        <h2 style="color:white; font-weight:900; font-size:2.2rem;">Discover Pets the Fun Way!</h2>
-        <p style="color:rgba(255,255,255,0.85); font-size:1.05rem; max-width:500px; margin:14px auto 28px;">
-          Try <strong>PawSwipe</strong> — our Tinder-inspired pet discovery feature.
-          Swipe right to like, swipe left to skip. Find your match instantly!
-        </p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
-          <a href="./pages/pawswipe.html" class="btn btn-lg" style="background:white; color:#ff6b35; font-weight:700; border-radius:25px; padding:12px 32px;">
-            🐾 Start PawSwiping!
+      <!-- ── Discover by Species ── -->
+      <section class="mb-10">
+        <h2
+          class="text-xl font-headline font-bold mb-5 px-1 lg:text-2xl lg:mb-7"
+        >
+          Discover by Species
+        </h2>
+        <div class="grid grid-cols-4 gap-3 lg:grid-cols-8 lg:gap-4">
+          <a
+            href="./pages/pets.html?type=Dog"
+            class="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-16 h-16 rounded-[1.5rem] bg-secondary-container flex items-center justify-center text-on-secondary-container shadow-sm lg:w-20 lg:h-20 lg:rounded-[1.75rem]"
+            >
+              <span class="material-symbols-outlined text-3xl lg:text-4xl"
+                >pets</span
+              >
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >DOGS</span
+            >
           </a>
-          <a href="./pages/match-finder.html" class="btn btn-lg" style="background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.5); font-weight:600; border-radius:25px; padding:12px 32px;">
-            🔍 Take Match Quiz
+          <a
+            href="./pages/pets.html?type=Cat"
+            class="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-16 h-16 rounded-[1.5rem] bg-surface-container-high flex items-center justify-center text-on-surface shadow-sm lg:w-20 lg:h-20 lg:rounded-[1.75rem]"
+            >
+              <span class="material-symbols-outlined text-3xl lg:text-4xl"
+                >cruelty_free</span
+              >
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >CATS</span
+            >
+          </a>
+          <a
+            href="./pages/pets.html?type=Bird"
+            class="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-16 h-16 rounded-[1.5rem] bg-surface-container-high flex items-center justify-center text-on-surface shadow-sm lg:w-20 lg:h-20 lg:rounded-[1.75rem]"
+            >
+              <span class="material-symbols-outlined text-3xl lg:text-4xl"
+                >flutter_dash</span
+              >
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >BIRDS</span
+            >
+          </a>
+          <a
+            href="./pages/pets.html"
+            class="flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-16 h-16 rounded-[1.5rem] bg-surface-container-high flex items-center justify-center text-on-surface shadow-sm lg:w-20 lg:h-20 lg:rounded-[1.75rem]"
+            >
+              <span class="material-symbols-outlined text-3xl lg:text-4xl"
+                >grid_view</span
+              >
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >OTHERS</span
+            >
+          </a>
+          <!-- Extra categories visible only on desktop -->
+          <a
+            href="./pages/pets.html?type=Rabbit"
+            class="hidden lg:flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-20 h-20 rounded-[1.75rem] bg-surface-container-high flex items-center justify-center text-on-surface shadow-sm"
+            >
+              <span class="material-symbols-outlined text-4xl"
+                >cruelty_free</span
+              >
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >RABBITS</span
+            >
+          </a>
+          <a
+            href="./pages/trade.html"
+            class="hidden lg:flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-20 h-20 rounded-[1.75rem] bg-surface-container-high flex items-center justify-center text-on-surface shadow-sm"
+            >
+              <span class="material-symbols-outlined text-4xl">swap_horiz</span>
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >TRADE</span
+            >
+          </a>
+          <a
+            href="./pages/pawswipe.html"
+            class="hidden lg:flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-20 h-20 rounded-[1.75rem] bg-primary-container/20 flex items-center justify-center text-primary shadow-sm"
+            >
+              <span class="material-symbols-outlined text-4xl">style</span>
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >SWIPE</span
+            >
+          </a>
+          <a
+            href="./pages/match-finder.html"
+            class="hidden lg:flex flex-col items-center gap-2 active:scale-95 transition-transform"
+          >
+            <div
+              class="w-20 h-20 rounded-[1.75rem] bg-tertiary-container/25 flex items-center justify-center text-tertiary shadow-sm"
+            >
+              <span class="material-symbols-outlined text-4xl">quiz</span>
+            </div>
+            <span class="text-xs font-bold font-label text-on-surface-variant"
+              >QUIZ</span
+            >
           </a>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ======================== HOW IT WORKS ======================== -->
-  <section class="py-5 bg-white">
-    <div class="container">
-      <div class="section-title">
-        <h2>How PawMatch Works</h2>
-        <div class="title-underline"></div>
-        <p>Three simple steps to find your perfect pet companion</p>
-      </div>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="feature-icon-box">
-            <span class="icon">🔍</span>
-            <h5>1. Discover Pets</h5>
-            <p>Browse our listings or use PawSwipe to discover pets in a fun, swipe-based interface.</p>
-          </div>
+      <!-- ── New Arrivals ── -->
+      <section class="mb-10 -mx-4 overflow-hidden lg:mx-0 lg:overflow-visible">
+        <div class="flex justify-between items-end px-6 mb-5 lg:px-0">
+          <h2 class="text-xl font-headline font-bold lg:text-2xl">
+            New arrivals
+          </h2>
+          <a
+            href="./pages/pets.html"
+            class="text-primary font-label text-sm font-bold"
+            >View All</a
+          >
         </div>
-        <div class="col-md-4">
-          <div class="feature-icon-box">
-            <span class="icon">💖</span>
-            <h5>2. Match & Save</h5>
-            <p>Like the pets you love! Saved matches appear in your personal My Matches page.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="feature-icon-box">
-            <span class="icon">🏠</span>
-            <h5>3. Adopt or Trade</h5>
-            <p>Contact the owner or shelter to start the adoption or purchase process. Give a pet a home!</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ======================== FEATURES OVERVIEW ======================== -->
-  <section class="py-5 bg-light-custom">
-    <div class="container">
-      <div class="section-title">
-        <h2>Everything You Need</h2>
-        <div class="title-underline"></div>
-      </div>
-      <div class="row g-3">
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">🐾</span>
-            <h5>PawSwipe</h5>
-            <p>Tinder for pets</p>
-          </div>
+        <!-- Loading -->
+        <div id="featuredLoading" class="flex justify-center py-8">
+          <div
+            class="w-8 h-8 border-4 border-primary-container border-t-primary rounded-full animate-spin"
+          ></div>
         </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">🔍</span>
-            <h5>Browse Pets</h5>
-            <p>Filter & search</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">💱</span>
-            <h5>Trade/Rehome</h5>
-            <p>Marketplace</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">🧠</span>
-            <h5>Match Quiz</h5>
-            <p>AI-style matching</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">💬</span>
-            <h5>Community</h5>
-            <p>Social feed</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <div class="feature-icon-box">
-            <span class="icon">📊</span>
-            <h5>Dashboard</h5>
-            <p>Manage listings</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ======================== TESTIMONIALS ======================== -->
-  <section class="py-5 bg-white">
-    <div class="container">
-      <div class="section-title">
-        <h2>Happy PawMatch Families</h2>
-        <div class="title-underline"></div>
-      </div>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <div class="testimonial-avatar">R</div>
+        <!-- Mobile: horizontal scroll | Desktop: wrapping grid -->
+        <div
+          class="flex gap-5 overflow-x-auto px-6 pb-4 snap-x no-scrollbar lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0 lg:pb-0 lg:snap-none"
+          id="featuredPetsGrid"
+        ></div>
+      </section>
+
+      <!-- ── Bottom sections: stacked on mobile, side-by-side on desktop ── -->
+      <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start mb-10">
+        <!-- ── Adoption Stories ── -->
+        <section
+          class="mb-10 lg:mb-0 bg-primary-container/10 rounded-xl p-7 relative overflow-hidden lg:h-full"
+        >
+          <div
+            class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-12 -mt-12 pointer-events-none"
+          ></div>
+          <h2 class="text-xl font-headline font-bold mb-6 lg:text-2xl">
+            Adoption Stories
+          </h2>
+          <div class="flex flex-col gap-5">
+            <span
+              class="material-symbols-outlined text-primary text-4xl"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >format_quote</span
+            >
+            <p
+              class="text-base italic font-body text-on-surface-variant leading-relaxed lg:text-lg"
+            >
+              "Finding Max through PawMatch was the best thing that happened to
+              our family this year. The process was so seamless and personal."
+            </p>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-11 h-11 rounded-full bg-secondary-container flex items-center justify-center flex-shrink-0"
+              >
+                <span
+                  class="font-headline font-bold text-on-secondary-container"
+                  >A</span
+                >
+              </div>
               <div>
-                <div class="fw-bold">Rahim Ahmed</div>
-                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+                <h4 class="font-bold text-sm font-headline">Alex Miller</h4>
+                <p class="text-xs text-on-surface-variant">
+                  Adopted 'Buddy' in Oct 2023
+                </p>
               </div>
             </div>
-            <p style="font-size:0.9rem; color:#555; margin:0">
-              "PawSwipe is so addictive! Found my Labrador Buddy through it in under 5 minutes. The adoption process was smooth and the team was very helpful."
-            </p>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <div class="testimonial-avatar">F</div>
+        </section>
+
+        <!-- ── How It Works ── -->
+        <section class="mb-10 lg:mb-0">
+          <h2
+            class="text-xl font-headline font-bold mb-5 px-1 lg:text-2xl lg:mb-6"
+          >
+            How PawMatch Works
+          </h2>
+          <div class="flex flex-col gap-3">
+            <div
+              class="bg-surface-container-lowest rounded-lg p-5 flex items-start gap-4 shadow-sm"
+            >
+              <div
+                class="w-12 h-12 rounded-[1rem] bg-secondary-container flex items-center justify-center flex-shrink-0"
+              >
+                <span
+                  class="material-symbols-outlined text-on-secondary-container text-xl"
+                  >search</span
+                >
+              </div>
               <div>
-                <div class="fw-bold">Fatima Begum</div>
-                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+                <h3 class="font-headline font-bold text-base mb-1">
+                  1. Discover Pets
+                </h3>
+                <p class="text-on-surface-variant text-sm">
+                  Browse listings or use PawSwipe to discover pets in a fun,
+                  swipe-based interface.
+                </p>
               </div>
             </div>
-            <p style="font-size:0.9rem; color:#555; margin:0">
-              "I used the Match Finder quiz and it suggested a Persian cat — exactly what I had in mind! Now I have Oliver and he is the love of my life."
-            </p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="testimonial-card">
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <div class="testimonial-avatar">K</div>
+            <div
+              class="bg-surface-container-lowest rounded-lg p-5 flex items-start gap-4 shadow-sm"
+            >
+              <div
+                class="w-12 h-12 rounded-[1rem] bg-tertiary-container/40 flex items-center justify-center flex-shrink-0"
+              >
+                <span
+                  class="material-symbols-outlined text-tertiary text-xl"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >favorite</span
+                >
+              </div>
               <div>
-                <div class="fw-bold">Karim Hossain</div>
-                <div class="text-muted" style="font-size:0.8rem">⭐⭐⭐⭐⭐</div>
+                <h3 class="font-headline font-bold text-base mb-1">
+                  2. Match &amp; Save
+                </h3>
+                <p class="text-on-surface-variant text-sm">
+                  Like the pets you love! Saved matches appear in your personal
+                  My Matches page.
+                </p>
               </div>
             </div>
-            <p style="font-size:0.9rem; color:#555; margin:0">
-              "Rehomed my cat Luna through PawMatch when I had to move abroad. She found an amazing new family within 3 days. Thank you PawMatch!"
-            </p>
+            <div
+              class="bg-surface-container-lowest rounded-lg p-5 flex items-start gap-4 shadow-sm"
+            >
+              <div
+                class="w-12 h-12 rounded-[1rem] bg-primary-container/20 flex items-center justify-center flex-shrink-0"
+              >
+                <span class="material-symbols-outlined text-primary text-xl"
+                  >home</span
+                >
+              </div>
+              <div>
+                <h3 class="font-headline font-bold text-base mb-1">
+                  3. Adopt or Trade
+                </h3>
+                <p class="text-on-surface-variant text-sm">
+                  Contact the owner or shelter to start the adoption process.
+                  Give a pet a home!
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
-  </section>
+      <!-- /bottom grid -->
+    </main>
 
-  <!-- Footer injected by main.js -->
+    <!-- Footer -->
+    <footer
+      class="w-full rounded-t-[4rem] bg-stone-100 py-10 px-8 flex flex-col items-center gap-5 lg:flex-row lg:justify-between lg:items-center lg:px-16 lg:rounded-t-[2rem]"
+    >
+      <p class="text-lg font-black font-headline text-stone-800">PawMatch</p>
+      <div class="flex flex-wrap justify-center gap-5 font-body text-sm">
+        <a
+          class="text-stone-500 hover:text-orange-600 transition-colors"
+          href="./pages/about.html"
+          >About Us</a
+        >
+        <a
+          class="text-stone-500 hover:text-orange-600 transition-colors"
+          href="./pages/adoption-process.html"
+          >Adoption Guide</a
+        >
+        <a
+          class="text-stone-500 hover:text-orange-600 transition-colors"
+          href="./pages/contact.html"
+          >Contact</a
+        >
+      </div>
+      <p class="text-stone-400 text-xs text-center lg:text-right">
+        © 2026 PawMatch. Curating Lifelong Bonds.
+      </p>
+    </footer>
 
-  <!-- Bootstrap 5 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- jQuery (for any jQuery features) -->
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <!-- PawMatch Scripts -->
-  <script src="./js/main.js"></script>
+    <script src="./js/main.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const grid = document.getElementById("featuredPetsGrid");
+        const loading = document.getElementById("featuredLoading");
 
-  <script>
-    // ---- Load Featured Pets on Home Page ----
-    document.addEventListener("DOMContentLoaded", async function () {
-      const grid = document.getElementById("featuredPetsGrid");
-      const loading = document.getElementById("featuredLoading");
+        function saveToMatches(pet) {
+          const matches = JSON.parse(
+            localStorage.getItem("pawmatch_saved") || "[]",
+          );
+          if (matches.find((m) => m.id === pet.id)) {
+            showToast(pet.name + " is already in your matches!", "info");
+            return;
+          }
+          matches.push({
+            ...pet,
+            savedAt: new Date().toISOString(),
+            action: "liked",
+          });
+          localStorage.setItem("pawmatch_saved", JSON.stringify(matches));
+          showToast("❤️ " + pet.name + " saved to My Matches!", "success");
+        }
+        window.saveToMatchesHome = saveToMatches;
 
-      try {
-        const response = await fetch("http://localhost:5000/api/pets/featured");
-        const pets = await response.json();
+        try {
+          const response = await fetch(
+            "http://localhost:5000/api/pets/featured",
+          );
+          const pets = await response.json();
+          loading.style.display = "none";
 
-        loading.style.display = "none";
+          const statusMap = {
+            Adoption: "bg-secondary-fixed text-on-secondary-container",
+            Sale: "bg-primary-container/30 text-on-primary-container",
+            Rehome: "bg-tertiary-container/40 text-on-tertiary-container",
+          };
 
-        // Show up to 6 featured pets
-        pets.slice(0, 6).forEach((pet) => {
-          const statusColors = { Adoption: "success", Sale: "warning", Rehome: "info" };
-          const badgeColor = statusColors[pet.status] || "secondary";
-
-          const col = document.createElement("div");
-          col.className = "col-md-4 col-sm-6 mb-4";
-          col.innerHTML = `
-            <div class="pet-card h-100">
-              <img src="${pet.image}" alt="${pet.name}"
-                onerror="this.src='https://placehold.co/400x300/f0f0f0/aaa?text=No+Image'">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                  <span class="pet-name">${pet.name}</span>
-                  <span class="badge bg-${badgeColor}">${pet.status}</span>
-                </div>
-                <div class="pet-breed">${pet.breed} · ${pet.type}</div>
-                <div class="pet-tags">
-                  <span class="pet-tag">📍 ${pet.location}</span>
-                  <span class="pet-tag">🎂 ${pet.age}</span>
-                  <span class="pet-tag">${pet.gender}</span>
-                </div>
-                <a href="./pages/pet-details.html?id=${pet.id}" class="btn btn-primary-pawmatch btn-sm w-100 mt-2">
-                  View Profile →
-                </a>
+          pets.slice(0, 8).forEach((pet) => {
+            const card = document.createElement("div");
+            card.className =
+              "min-w-[260px] snap-start bg-surface-container-lowest rounded-lg shadow-sm flex-shrink-0";
+            const sc =
+              statusMap[pet.status] ||
+              "bg-surface-container-high text-on-surface-variant";
+            card.innerHTML = `
+            <div class="h-56 rounded-tl-lg rounded-br-lg rounded-tr-[0.5rem] rounded-bl-[0.5rem] overflow-hidden relative">
+              <img src="${pet.image}" alt="${pet.name}" class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/400x300/e9e8e4/aaa?text=No+Image'">
+              <button onclick="saveToMatchesHome(${JSON.stringify(pet).replace(/"/g, "&quot;")})"
+                class="absolute top-3 right-3 w-10 h-10 rounded-full bg-white/70 backdrop-blur-md flex items-center justify-center text-tertiary active:scale-90 transition-transform">
+                <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">favorite</span>
+              </button>
+            </div>
+            <div class="p-4">
+              <div class="flex justify-between items-start mb-1">
+                <h3 class="text-base font-bold font-headline">${pet.name}</h3>
+                <span class="${sc} px-2 py-0.5 rounded-full text-[9px] font-black tracking-widest uppercase">${pet.status}</span>
+              </div>
+              <div class="flex items-center gap-1 text-on-surface-variant text-xs mb-3">
+                <span class="material-symbols-outlined text-sm">location_on</span>
+                <span>${pet.location}</span>
+              </div>
+              <div class="flex gap-2">
+                <span class="px-2 py-1 bg-surface-container-low rounded-lg text-xs font-medium">${pet.type}</span>
+                <span class="px-2 py-1 bg-surface-container-low rounded-lg text-xs font-medium">${pet.age}</span>
               </div>
             </div>`;
-          grid.appendChild(col);
-        });
-      } catch (err) {
-        loading.style.display = "none";
-        grid.innerHTML = `
-          <div class="col-12 text-center py-4">
-            <p class="text-muted">⚠️ Start the backend server to see featured pets.</p>
-            <a href="./pages/pets.html" class="btn btn-primary-pawmatch">Browse Pets Anyway</a>
+            grid.appendChild(card);
+          });
+
+          const statEl = document.getElementById("heroStatPets");
+          if (statEl && pets.length > 0) statEl.textContent = pets.length + "+";
+        } catch (err) {
+          loading.style.display = "none";
+          grid.className = "w-full px-6";
+          grid.innerHTML = `
+          <div class="text-center py-4">
+            <p class="text-on-surface-variant text-sm">Start the backend server to see featured pets.</p>
+            <a href="./pages/pets.html"
+               class="inline-block mt-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold py-3 px-6 rounded-full text-sm">
+              Browse Pets Anyway
+            </a>
           </div>`;
-      }
-    });
-  </script>
-</body>
+        }
+      });
+    </script>
+  </body>
 </html>

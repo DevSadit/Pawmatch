@@ -2,9 +2,6 @@
 // PawMatch - Community Feed JavaScript
 // community.js
 // =============================================
-// Handles social posts: load, create, delete, like
-// This is a CRUD module (create/read/delete)
-// =============================================
 
 // ---- Load all community posts ----
 async function loadCommunityPosts() {
@@ -12,78 +9,78 @@ async function loadCommunityPosts() {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="loading-spinner">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>`;
+    <div style="display:flex;justify-content:center;padding:40px 0;">
+      <div style="width:40px;height:40px;border:4px solid #f9873e;border-top-color:#964300;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>`;
 
   try {
-    const response = await fetch(`${API_BASE}/community`);
-    const posts = await response.json();
+    const res   = await fetch(`${API_BASE}/community`);
+    const posts = await res.json();
 
     container.innerHTML = "";
 
     if (posts.length === 0) {
       container.innerHTML = `
-        <div class="text-center py-5">
+        <div style="text-align:center;padding:60px 16px;">
           <div style="font-size:3rem">💬</div>
-          <h5 class="mt-3">No posts yet</h5>
-          <p class="text-muted">Be the first to share something!</p>
+          <h5 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;margin-top:12px;">No posts yet</h5>
+          <p style="color:#5b5c59;">Be the first to share something!</p>
         </div>`;
       return;
     }
 
-    posts.forEach((post) => {
-      container.appendChild(renderPost(post));
-    });
+    posts.forEach((post) => container.appendChild(renderPost(post)));
   } catch (err) {
-    container.innerHTML = `<div class="alert alert-danger">Could not load posts. Is the server running?</div>`;
+    container.innerHTML = `
+      <div style="text-align:center;padding:40px 16px;background:#fee2e2;border-radius:16px;">
+        <p style="color:#b02500;font-weight:600;">Could not load posts. Is the server running?</p>
+      </div>`;
   }
 }
 
 // ---- Render a single post element ----
 function renderPost(post) {
-  const user = getCurrentUser();
-  const isOwner = user && user.id === post.authorId;
-  const isAdmin = user && user.role === "admin";
-  const canDelete = isOwner || isAdmin;
+  const user     = getCurrentUser();
+  const isOwner  = user && (user.id === post.authorId || user._id === post.authorId);
+  const isAdmin  = user && user.role === "admin";
+  const canDelete= isOwner || isAdmin;
 
   const div = document.createElement("div");
-  div.className = "community-post-card card mb-3 shadow-sm";
-  div.id = `post-${post.id}`;
+  div.id    = `post-${post.id}`;
+  div.style.cssText = "background:#ffffff;border-radius:1.25rem;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.06);margin-bottom:16px;";
 
   div.innerHTML = `
-    <div class="card-body">
-      <!-- Author & Time -->
-      <div class="d-flex justify-content-between align-items-start mb-3">
-        <div class="d-flex align-items-center gap-2">
-          <div class="post-avatar">${post.authorName.charAt(0).toUpperCase()}</div>
-          <div>
-            <div class="fw-bold" style="font-size:0.9rem">${post.authorName}</div>
-            <div class="text-muted" style="font-size:0.78rem">${timeAgo(post.createdAt)}</div>
-          </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#964300,#f9873e);display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;color:#fff0e9;flex-shrink:0;">
+          ${post.authorName.charAt(0).toUpperCase()}
         </div>
-        ${canDelete ? `
-        <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})" title="Delete post">
-          🗑️
-        </button>` : ""}
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;color:#2e2f2d;">${post.authorName}</div>
+          <div style="font-size:0.78rem;color:#5b5c59;">${timeAgo(post.createdAt)}</div>
+        </div>
       </div>
+      ${canDelete ? `
+      <button onclick="deletePost('${post.id}')"
+        style="width:34px;height:34px;border-radius:50%;border:none;background:#fee2e2;color:#b02500;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;"
+        title="Delete post">🗑️</button>` : ""}
+    </div>
 
-      <!-- Post Content -->
-      <p class="mb-2" style="font-size:0.95rem; line-height:1.6">${escapeHtml(post.content)}</p>
+    <p style="font-size:0.95rem;line-height:1.65;color:#2e2f2d;margin-bottom:12px;">${escapeHtml(post.content)}</p>
 
-      ${post.image ? `<img src="${post.image}" alt="Post image" class="img-fluid rounded mb-2" style="max-height:300px; width:100%; object-fit:cover;">` : ""}
+    ${post.image ? `<img src="${post.image}" alt="Post image" style="width:100%;max-height:300px;object-fit:cover;border-radius:12px;margin-bottom:12px;">` : ""}
 
-      <!-- Like Button -->
-      <div class="d-flex align-items-center gap-3 mt-2 pt-2 border-top">
-        <button class="btn btn-sm btn-light like-btn" id="like-btn-${post.id}" onclick="likePost(${post.id})">
-          ❤️ <span id="like-count-${post.id}">${post.likes}</span>
-        </button>
-        <span class="text-muted" style="font-size:0.8rem">
-          ${new Date(post.createdAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-        </span>
-      </div>
+    <div style="display:flex;align-items:center;gap:12px;padding-top:12px;border-top:1px solid #e9e8e4;">
+      <button id="like-btn-${post.id}" onclick="likePost('${post.id}')"
+        style="display:flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;border:1px solid #e3e2de;background:transparent;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;font-size:0.85rem;font-weight:600;color:#5b5c59;transition:all 0.2s;"
+        onmouseover="this.style.borderColor='#aa2c32';this.style.color='#aa2c32'"
+        onmouseout="this.style.borderColor='#e3e2de';this.style.color='#5b5c59'">
+        ❤️ <span id="like-count-${post.id}">${post.likes}</span>
+      </button>
+      <span style="font-size:0.8rem;color:#5b5c59;">
+        ${new Date(post.createdAt).toLocaleDateString("en-GB", { day:"numeric", month:"short" })}
+      </span>
     </div>`;
 
   return div;
@@ -92,120 +89,80 @@ function renderPost(post) {
 // ---- Create a new post ----
 async function createPost() {
   const user = getCurrentUser();
-  if (!user) {
-    showToast("Please login to post", "warning");
-    return;
-  }
+  if (!user) { showToast("Please login to post", "warning"); return; }
 
   const contentInput = document.getElementById("postContent");
   const content = contentInput?.value.trim();
 
-  if (!content) {
-    showToast("Please write something before posting", "warning");
-    return;
-  }
-
-  if (content.length > 500) {
-    showToast("Post is too long (max 500 characters)", "warning");
-    return;
-  }
+  if (!content)          { showToast("Please write something before posting", "warning"); return; }
+  if (content.length > 500) { showToast("Post is too long (max 500 characters)", "warning"); return; }
 
   const submitBtn = document.getElementById("submitPostBtn");
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Posting...";
-  }
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Posting…"; }
 
   try {
-    const response = await fetch(`${API_BASE}/community`, {
+    const res  = await fetch(`${API_BASE}/community`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({
-        content,
-        authorName: user.name,
-      }),
+      body: JSON.stringify({ content, authorName: user.name }),
     });
+    const data = await res.json();
 
-    const data = await response.json();
-
-    if (response.ok) {
-      // Clear the input
+    if (res.ok) {
       if (contentInput) contentInput.value = "";
-
-      // Add the new post to the top of the feed
       const container = document.getElementById("postsContainer");
-      if (container) {
-        const newPostEl = renderPost(data.post);
-        container.insertBefore(newPostEl, container.firstChild);
-      }
-
+      if (container) container.insertBefore(renderPost(data.post), container.firstChild);
       showToast("Post shared!", "success");
-
-      // Update character counter
       updateCharCount();
     } else {
       showToast(data.message || "Failed to post", "error");
     }
-  } catch (err) {
-    showToast("Server error. Please try again.", "error");
-  } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Post";
-    }
+  } catch { showToast("Server error. Please try again.", "error"); }
+  finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Post"; }
   }
 }
 
 // ---- Delete a post ----
 async function deletePost(postId) {
   if (!confirm("Delete this post?")) return;
-
   try {
-    const response = await fetch(`${API_BASE}/community/${postId}`, {
-      method: "DELETE",
-      credentials: "include",
+    const res = await fetch(`${API_BASE}/community/${postId}`, {
+      method: "DELETE", credentials: "include",
     });
-
-    if (response.ok) {
-      // Remove from DOM
-      const postEl = document.getElementById(`post-${postId}`);
-      if (postEl) {
-        postEl.style.transition = "all 0.3s ease";
-        postEl.style.opacity = "0";
-        setTimeout(() => postEl.remove(), 300);
+    if (res.ok) {
+      const el = document.getElementById(`post-${postId}`);
+      if (el) {
+        el.style.transition = "all 0.3s ease";
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 300);
       }
       showToast("Post deleted", "success");
     } else {
       showToast("Could not delete post", "error");
     }
-  } catch (err) {
-    showToast("Server error", "error");
-  }
+  } catch { showToast("Server error", "error"); }
 }
 
 // ---- Like / Unlike a post ----
 async function likePost(postId) {
-  const user = getCurrentUser();
   const guestId = "guest_" + (localStorage.getItem("guest_id") || Math.random().toString(36).substr(2, 9));
   localStorage.setItem("guest_id", guestId.replace("guest_", ""));
 
   try {
-    const response = await fetch(`${API_BASE}/community/${postId}/like`, {
+    const res = await fetch(`${API_BASE}/community/${postId}/like`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ guestId }),
     });
-
-    if (response.ok) {
-      const data = await response.json();
+    if (res.ok) {
+      const data = await res.json();
       const countEl = document.getElementById(`like-count-${postId}`);
       if (countEl) countEl.textContent = data.likes;
     }
-  } catch (err) {
-    // Silently fail for like
-  }
+  } catch { /* silently fail */ }
 }
 
 // ---- Update character counter ----
@@ -213,10 +170,9 @@ function updateCharCount() {
   const content = document.getElementById("postContent");
   const counter = document.getElementById("charCount");
   if (!content || !counter) return;
-
   const remaining = 500 - content.value.length;
   counter.textContent = remaining;
-  counter.style.color = remaining < 50 ? "#dc3545" : "#6c757d";
+  counter.style.color = remaining < 50 ? "#b02500" : "#5b5c59";
 }
 
 // ---- Escape HTML to prevent XSS ----
@@ -232,31 +188,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loadCommunityPosts();
 
-  // Post submission
   const submitBtn = document.getElementById("submitPostBtn");
   if (submitBtn) submitBtn.addEventListener("click", createPost);
 
-  // Character counter
   const content = document.getElementById("postContent");
   if (content) {
     content.addEventListener("input", updateCharCount);
-
-    // Ctrl+Enter to submit
     content.addEventListener("keydown", function (e) {
       if (e.ctrlKey && e.key === "Enter") createPost();
     });
   }
 
-  // Check login status and show/hide post form
-  const postForm = document.getElementById("postFormWrapper");
-  const loginPrompt = document.getElementById("loginPrompt");
   const user = getCurrentUser();
-
+  const postForm    = document.getElementById("postFormWrapper");
+  const loginPrompt = document.getElementById("loginPrompt");
   if (user) {
-    if (postForm) postForm.style.display = "block";
+    if (postForm)    postForm.style.display    = "block";
     if (loginPrompt) loginPrompt.style.display = "none";
   } else {
-    if (postForm) postForm.style.display = "none";
+    if (postForm)    postForm.style.display    = "none";
     if (loginPrompt) loginPrompt.style.display = "block";
   }
 });

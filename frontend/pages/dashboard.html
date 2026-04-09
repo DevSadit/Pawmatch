@@ -1,191 +1,343 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard – PawMatch</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/dashboard.css" />
-  <link rel="stylesheet" href="../css/responsive.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,700;0,800;1,800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low":    "#f2f1ec",
+            "surface-container":        "#e9e8e4",
+            "surface-container-high":   "#e3e2de",
+            "surface-container-highest":"#deddd8",
+            "surface":                  "#f8f6f2",
+            "on-surface":               "#2e2f2d",
+            "on-surface-variant":       "#5b5c59",
+            "primary":                  "#964300",
+            "primary-container":        "#f9873e",
+            "on-primary":               "#fff0e9",
+            "on-primary-container":     "#451b00",
+            "secondary":                "#006761",
+            "secondary-container":      "#7cf6ec",
+            "secondary-fixed":          "#7cf6ec",
+            "on-secondary-container":   "#005c57",
+            "secondary-dim":            "#005a55",
+            "tertiary":                 "#aa2c32",
+            "tertiary-dim":             "#992027",
+            "on-tertiary":              "#ffefee",
+            "tertiary-container":       "#ff928e",
+            "on-tertiary-container":    "#69000f",
+            "outline":                  "#777774",
+            "outline-variant":          "#aeadaa",
+            "error":                    "#b02500",
+          },
+          borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+          fontFamily:   { headline: ["Plus Jakarta Sans"], body: ["Be Vietnam Pro"], label: ["Plus Jakarta Sans"] },
+        },
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body style="background:#f8f9fa;">
-  <!-- Navbar injected by main.js -->
+<body class="bg-surface font-body text-on-surface pb-32">
 
-  <div class="dashboard-layout">
-    <!-- ===== SIDEBAR ===== -->
-    <div class="dashboard-sidebar">
-      <div class="sidebar-user">
-        <div class="sidebar-avatar" id="sidebarAvatar">U</div>
-        <h6 id="sidebarName">Loading...</h6>
-        <small id="sidebarEmail">...</small>
-      </div>
-      <ul class="sidebar-nav">
-        <li><a href="./dashboard.html" class="active">
-          <span class="nav-icon">📊</span> Dashboard
-        </a></li>
-        <li><a href="./profile.html">
-          <span class="nav-icon">👤</span> Profile
-        </a></li>
-        <li><a href="./my-matches.html">
-          <span class="nav-icon">💖</span> My Matches
-        </a></li>
-        <li><a href="./add-pet.html">
-          <span class="nav-icon">➕</span> Add Pet
-        </a></li>
-        <li><a href="./manage-listings.html">
-          <span class="nav-icon">🐾</span> Manage Listings
-        </a></li>
-        <li><a href="./pawswipe.html">
-          <span class="nav-icon">🔥</span> PawSwipe
-        </a></li>
-        <li id="adminNavItem" style="display:none;"><a href="./admin.html">
-          <span class="nav-icon">🔑</span> Admin Panel
-        </a></li>
-      </ul>
-    </div>
+  <main class="pt-24 pb-8 px-6 lg:max-w-7xl lg:mx-auto lg:px-12">
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <div class="dashboard-main">
-      <h3>📊 Dashboard Overview</h3>
+    <!-- Welcome Header -->
+    <section class="space-y-1 mb-7 lg:mb-8">
+      <h1 class="text-4xl font-headline font-extrabold tracking-tight text-on-surface lg:text-5xl" id="welcomeHeading">
+        Hi, there! 🐾
+      </h1>
+      <p class="text-on-surface-variant font-medium lg:text-lg" id="welcomeSubtitle">
+        Your sanctuary is buzzing with new friends today.
+      </p>
+    </section>
 
-      <!-- Stat Cards -->
-      <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-          <div class="stat-card">
-            <div class="stat-card-icon orange">🐾</div>
-            <div>
-              <div class="stat-card-value" id="statListings">0</div>
-              <div class="stat-card-label">My Listings</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card">
-            <div class="stat-card-icon teal">💖</div>
-            <div>
-              <div class="stat-card-value" id="statMatches">0</div>
-              <div class="stat-card-label">Saved Matches</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card">
-            <div class="stat-card-icon green">🌟</div>
-            <div>
-              <div class="stat-card-value" id="statSwipes">-</div>
-              <div class="stat-card-label">PawSwipe Ready</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card">
-            <div class="stat-card-icon purple">📅</div>
-            <div>
-              <div class="stat-card-value" id="statMember">-</div>
-              <div class="stat-card-label">Member Since</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <h5 class="fw-bold mb-3">Quick Actions</h5>
-      <div class="quick-actions mb-4">
-        <a href="./add-pet.html" class="quick-action-btn">➕ Add Pet</a>
-        <a href="./manage-listings.html" class="quick-action-btn">🐾 Manage Listings</a>
-        <a href="./pawswipe.html" class="quick-action-btn">🔥 PawSwipe</a>
-        <a href="./my-matches.html" class="quick-action-btn">💖 My Matches</a>
-        <a href="./match-finder.html" class="quick-action-btn">🧠 Match Quiz</a>
-        <a href="./profile.html" class="quick-action-btn">👤 Edit Profile</a>
-      </div>
-
-      <!-- Recent Matches -->
-      <h5 class="fw-bold mb-3">💖 Recently Saved Matches</h5>
-      <div id="recentMatchesContainer">
-        <p class="text-muted">Loading...</p>
-      </div>
-
-      <!-- Not logged in warning -->
-      <div id="loginWarning" style="display:none;" class="alert alert-warning mt-3">
-        Please <a href="./login.html">login</a> to access your dashboard.
+    <!-- Login Warning -->
+    <div id="loginWarning" style="display:none;"
+         class="bg-tertiary-container/30 text-on-tertiary-container rounded-xl p-4 flex items-start gap-3 mb-7">
+      <span class="material-symbols-outlined text-tertiary mt-0.5">warning</span>
+      <div>
+        <p class="font-bold text-sm">Not logged in</p>
+        <p class="text-sm">Please <a href="./login.html" class="text-primary font-bold underline">login</a> to access your dashboard.</p>
       </div>
     </div>
-  </div>
 
-  <!-- Footer injected by main.js -->
+    <!-- ── Desktop two-column layout ── -->
+    <div class="lg:grid lg:grid-cols-3 lg:gap-10 lg:items-start">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+      <!-- ── Main content (left, 2 cols) ── -->
+      <div class="lg:col-span-2 space-y-7">
+
+        <!-- Bento Stats Cards: 2-col mobile → 4-col desktop -->
+        <section class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <!-- My Matches -->
+          <div class="col-span-2 bg-surface-container-lowest p-6 rounded-lg shadow-sm flex items-center justify-between overflow-hidden relative group lg:col-span-2">
+            <div class="z-10">
+              <p class="font-label text-xs uppercase tracking-widest text-on-surface-variant font-bold">My Matches</p>
+              <h2 class="text-5xl font-headline font-black text-primary mt-2" id="statMatches">—</h2>
+            </div>
+            <div class="absolute -right-4 -bottom-4 opacity-[0.08] group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-[120px] text-primary" style="font-variation-settings:'FILL' 1">favorite</span>
+            </div>
+            <div class="bg-primary-container/20 px-4 py-2 rounded-full z-10">
+              <span class="text-primary font-bold text-sm" id="statMatchesExtra">+0 today</span>
+            </div>
+          </div>
+
+          <!-- Active Listings -->
+          <div class="bg-secondary-container/30 p-6 rounded-lg flex flex-col justify-between min-h-[140px]">
+            <span class="material-symbols-outlined text-secondary mb-3 text-2xl">pets</span>
+            <div>
+              <p class="font-label text-xs uppercase tracking-widest text-secondary-dim font-bold">My Listings</p>
+              <h2 class="text-3xl font-headline font-bold text-on-surface mt-1" id="statListings">—</h2>
+            </div>
+          </div>
+
+          <!-- Member Since -->
+          <div class="bg-tertiary-container/25 p-6 rounded-lg flex flex-col justify-between min-h-[140px]">
+            <span class="material-symbols-outlined text-tertiary mb-3 text-2xl">calendar_month</span>
+            <div>
+              <p class="font-label text-xs uppercase tracking-widest text-tertiary-dim font-bold">Member Since</p>
+              <h2 class="text-xl font-headline font-bold text-on-surface mt-1" id="statMember">—</h2>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Actions: horizontal scroll on mobile, wrap on desktop -->
+        <section class="flex gap-3 overflow-x-auto pb-2 -mx-6 px-6 no-scrollbar lg:mx-0 lg:px-0 lg:flex-wrap lg:overflow-visible lg:pb-0">
+          <a href="./add-pet.html"
+             class="flex-shrink-0 bg-gradient-to-br from-primary to-primary-container text-on-primary px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold shadow-md shadow-primary/20 active:scale-95 transition-all">
+            Add a Listing
+          </a>
+          <a href="./manage-listings.html"
+             class="flex-shrink-0 bg-surface-container-highest text-on-surface px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
+            Manage Listings
+          </a>
+          <a href="./pawswipe.html"
+             class="flex-shrink-0 bg-surface-container-highest text-on-surface px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
+            PawSwipe
+          </a>
+          <a href="./profile.html"
+             class="flex-shrink-0 bg-surface-container-highest text-on-surface px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
+            Edit Profile
+          </a>
+          <a href="./admin.html" id="adminLink" style="display:none"
+             class="flex-shrink-0 bg-tertiary text-on-tertiary px-7 py-4 rounded-full font-label text-xs uppercase tracking-widest font-bold active:scale-95 transition-all">
+            Admin Panel
+          </a>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="space-y-4">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-headline font-bold lg:text-2xl">Recent Activity</h3>
+            <a href="./my-matches.html" class="text-primary font-bold text-sm font-label">View All</a>
+          </div>
+          <div class="space-y-3" id="recentMatchesContainer">
+            <!-- Filled by JS -->
+            <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-lg animate-pulse">
+              <div class="w-14 h-14 rounded-[1.25rem] bg-surface-container flex-shrink-0"></div>
+              <div class="flex-1 space-y-2">
+                <div class="h-4 bg-surface-container rounded w-2/3"></div>
+                <div class="h-3 bg-surface-container rounded w-1/2"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /main col -->
+
+      <!-- ── Sidebar (right, 1 col) — hidden on mobile ── -->
+      <aside class="hidden lg:flex flex-col gap-6 lg:col-span-1 lg:sticky lg:top-28">
+
+        <!-- Continue Swiping Card -->
+        <div class="relative h-52 w-full bg-surface-container rounded-xl overflow-hidden shadow-inner flex flex-col items-center justify-end">
+          <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary-container/20 z-0"></div>
+          <div class="absolute inset-0 flex items-center justify-center z-0">
+            <span style="font-size:5rem;opacity:0.15">🐾</span>
+          </div>
+          <div class="z-10 text-center p-6 w-full bg-gradient-to-t from-black/50 to-transparent">
+            <p class="font-headline font-bold text-2xl text-white drop-shadow-md">Continue Swiping</p>
+            <p class="text-sm text-white/80 font-medium mb-3">Find your next companion</p>
+            <a href="./pawswipe.html"
+               class="inline-block bg-white text-primary font-bold font-label text-xs uppercase tracking-widest px-6 py-2 rounded-full active:scale-95 transition-transform">
+              Open PawSwipe
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick navigation -->
+        <div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+          <div class="p-5 pb-2">
+            <h3 class="font-headline font-bold text-base text-on-surface">Quick Navigation</h3>
+          </div>
+          <nav class="flex flex-col">
+            <a href="./my-matches.html" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low transition-colors group">
+              <span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings:'FILL' 1">favorite</span>
+              <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">My Matches</span>
+              <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+            </a>
+            <a href="./manage-listings.html" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low transition-colors group">
+              <span class="material-symbols-outlined text-secondary text-lg">pets</span>
+              <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Manage Listings</span>
+              <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+            </a>
+            <a href="./match-finder.html" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low transition-colors group">
+              <span class="material-symbols-outlined text-primary text-lg">quiz</span>
+              <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Personality Quiz</span>
+              <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+            </a>
+            <a href="./profile.html" class="flex items-center gap-3 px-5 py-3 hover:bg-surface-container-low transition-colors group">
+              <span class="material-symbols-outlined text-outline text-lg">person</span>
+              <span class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Edit Profile</span>
+              <span class="material-symbols-outlined text-outline-variant ml-auto text-base">chevron_right</span>
+            </a>
+          </nav>
+          <!-- Logout -->
+          <div class="px-5 py-3 border-t border-surface-container">
+            <button id="pm-logout-btn"
+              class="flex items-center gap-2 text-error font-bold text-sm font-label uppercase tracking-widest active:scale-95 transition-transform">
+              <span class="material-symbols-outlined text-base">logout</span>Logout
+            </button>
+          </div>
+        </div>
+
+      </aside><!-- /sidebar -->
+
+    </div><!-- /desktop grid -->
+
+    <!-- Continue Swiping Card (mobile only, shown below activity) -->
+    <section class="relative h-52 w-full bg-surface-container rounded-xl overflow-hidden shadow-inner flex flex-col items-center justify-end mt-7 lg:hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary-container/20 z-0"></div>
+      <div class="absolute inset-0 flex items-center justify-center z-0">
+        <span style="font-size:5rem;opacity:0.15">🐾</span>
+      </div>
+      <div class="z-10 text-center p-6 w-full bg-gradient-to-t from-black/50 to-transparent">
+        <p class="font-headline font-bold text-2xl text-white drop-shadow-md">Continue Swiping</p>
+        <p class="text-sm text-white/80 font-medium mb-3">Find your next companion</p>
+        <a href="./pawswipe.html"
+           class="inline-block bg-white text-primary font-bold font-label text-xs uppercase tracking-widest px-6 py-2 rounded-full active:scale-95 transition-transform">
+          Open PawSwipe
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Simple footer -->
+  <footer class="w-full rounded-t-[4rem] bg-stone-100 py-10 px-8 flex flex-col items-center gap-4 mb-20
+                 lg:flex-row lg:justify-between lg:items-center lg:px-16 lg:rounded-t-[2rem] lg:mb-0">
+    <p class="text-lg font-black font-headline text-stone-800">PawMatch</p>
+    <p class="text-stone-400 text-xs text-center lg:text-right">© 2026 PawMatch. Curating Lifelong Bonds.</p>
+    <div class="flex gap-4">
+      <a class="text-stone-500 hover:text-orange-600 font-body text-sm" href="./about.html">About Us</a>
+      <a class="text-stone-500 hover:text-orange-600 font-body text-sm" href="./contact.html">Contact</a>
+    </div>
+    <!-- Logout (mobile footer, hidden on desktop — sidebar has it) -->
+    <button id="pm-logout-btn-mobile"
+      class="mt-2 text-error font-bold text-sm font-label uppercase tracking-widest flex items-center gap-1 active:scale-95 transition-transform lg:hidden"
+      onclick="document.getElementById('pm-logout-btn')?.click()">
+      <span class="material-symbols-outlined text-base">logout</span>Logout
+    </button>
+  </footer>
+
   <script src="../js/main.js"></script>
-
   <script>
     document.addEventListener("DOMContentLoaded", async function () {
-      const user = getCurrentUser();
+      const user = await syncCurrentUser().catch(() => getCurrentUser());
 
       if (!user) {
-        document.getElementById("loginWarning").style.display = "block";
-        document.getElementById("sidebarName").textContent = "Guest";
-        document.getElementById("sidebarEmail").textContent = "Not logged in";
+        document.getElementById("loginWarning").style.display = "flex";
+        document.getElementById("welcomeHeading").textContent = "Hi, Guest! 🐾";
+        document.getElementById("welcomeSubtitle").textContent = "Login to see your personalised dashboard.";
+        document.getElementById("recentMatchesContainer").innerHTML = `
+          <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-lg">
+            <div class="w-14 h-14 rounded-[1.25rem] bg-surface-container-high flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-outline">lock</span>
+            </div>
+            <p class="text-on-surface-variant text-sm">Login to see your recent activity.</p>
+          </div>`;
         return;
       }
 
-      // Set sidebar user info
-      document.getElementById("sidebarName").textContent = user.name;
-      document.getElementById("sidebarEmail").textContent = user.email;
-      document.getElementById("sidebarAvatar").textContent = user.name.charAt(0).toUpperCase();
+      // Greet user
+      document.getElementById("welcomeHeading").textContent = `Hi, ${user.name.split(" ")[0]}! 🐾`;
 
-      // Show admin nav if admin
-      if (user.role === "admin") {
-        document.getElementById("adminNavItem").style.display = "block";
-      }
+      // Show admin link
+      if (user.role === "admin") document.getElementById("adminLink").style.display = "block";
 
-      // Load matches from localStorage
-      const matches = JSON.parse(localStorage.getItem("pawmatch_saved") || "[]");
+      // Load matches
+      const matches = normalizeMatchEntries(await getSavedMatches().catch(() => []));
       document.getElementById("statMatches").textContent = matches.length;
+      document.getElementById("statMatchesExtra").textContent = `${matches.length} total`;
 
       // Member since
-      const joined = new Date(user.createdAt);
-      document.getElementById("statMember").textContent =
-        joined.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+      if (user.createdAt) {
+        const joined = new Date(user.createdAt);
+        document.getElementById("statMember").textContent =
+          joined.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+      }
 
-      // Load user's listings from backend
+      // Load listings from backend
       try {
-        const response = await fetch(`${API_BASE}/pets`, { credentials: "include" });
-        const allPets = await response.json();
-        const myPets = user.role === "admin" ? allPets : allPets.filter(p => p.owner === user.id);
+        const allPets = await apiFetch("/pets");
+        const myPets = user.role === "admin"
+          ? allPets
+          : allPets.filter(p => p.owner === user.id || p.owner === user._id);
         document.getElementById("statListings").textContent = myPets.length;
-      } catch (e) {
+      } catch {
         document.getElementById("statListings").textContent = "?";
       }
 
-      document.getElementById("statSwipes").textContent = "Ready!";
-
-      // Show recent matches
+      // Recent matches
       const container = document.getElementById("recentMatchesContainer");
       if (matches.length === 0) {
-        container.innerHTML = `<p class="text-muted">No saved matches yet. Try <a href="./pawswipe.html">PawSwipe</a>!</p>`;
+        container.innerHTML = `
+          <div class="flex items-center gap-4 bg-surface-container-low p-4 rounded-lg">
+            <div class="w-14 h-14 rounded-[1.25rem] bg-secondary-container/40 flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-secondary">search</span>
+            </div>
+            <div>
+              <p class="text-on-surface font-bold text-sm">No saved matches yet</p>
+              <p class="text-on-surface-variant text-xs">Try <a href="./pawswipe.html" class="text-primary font-bold">PawSwipe</a> to find your companion!</p>
+            </div>
+          </div>`;
       } else {
-        container.innerHTML = `<div class="row g-3">`;
+        container.innerHTML = "";
         matches.slice(0, 4).forEach(pet => {
-          container.querySelector(".row").innerHTML += `
-            <div class="col-6 col-md-3">
-              <div class="card h-100" style="border-radius:14px; border:1px solid #e8e8e8; overflow:hidden;">
-                <img src="${pet.image}" alt="${pet.name}" style="height:120px;object-fit:cover;"
-                  onerror="this.src='https://placehold.co/200x120/f0f0f0/aaa?text=?'">
-                <div class="card-body p-2">
-                  <div class="fw-bold" style="font-size:0.88rem">${pet.name}</div>
-                  <small class="text-muted">${pet.breed}</small><br>
-                  <a href="./pet-details.html?id=${pet.id}" class="btn btn-primary-pawmatch btn-sm mt-1 w-100" style="font-size:0.75rem">View →</a>
-                </div>
-              </div>
-            </div>`;
+          const item = document.createElement("div");
+          item.className = "flex items-center gap-4 bg-surface-container-low p-4 rounded-lg active:bg-surface-container transition-colors cursor-pointer";
+          item.onclick = () => window.location.href = `./pet-details.html?id=${pet.id}`;
+          item.innerHTML = `
+            <div class="w-14 h-14 rounded-[1.25rem] overflow-hidden flex-shrink-0 bg-surface-container-high shadow-sm">
+              <img src="${pet.image}" alt="${pet.name}" class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/60x60/e9e8e4/aaa?text=?'">
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-on-surface font-bold text-sm truncate">You matched with ${pet.name}!</p>
+              <p class="text-on-surface-variant text-xs truncate">${pet.breed || pet.type} · ${pet.location || ""}</p>
+            </div>
+            <span class="material-symbols-outlined text-tertiary flex-shrink-0" style="font-variation-settings:'FILL' 1">favorite</span>`;
+          container.appendChild(item);
         });
         if (matches.length > 4) {
-          container.querySelector(".row").innerHTML += `
-            <div class="col-12 mt-2">
-              <a href="./my-matches.html" class="btn btn-outline-secondary btn-sm">See all ${matches.length} matches →</a>
-            </div>`;
+          const more = document.createElement("div");
+          more.className = "text-center pt-1";
+          more.innerHTML = `<a href="./my-matches.html" class="text-primary font-bold text-sm font-label">See all ${matches.length} matches →</a>`;
+          container.appendChild(more);
         }
       }
     });
