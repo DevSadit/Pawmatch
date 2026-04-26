@@ -14,8 +14,9 @@ function initLoginPage() {
     const password = document.getElementById("password").value;
     const errorDiv = document.getElementById("loginError");
     const submitBtn = loginForm.querySelector('button[type="submit"]');
+    const normalizedEmail = email.toLowerCase();
 
-    if (!email || !password) {
+    if (!normalizedEmail || !password) {
       showError(errorDiv, "Please enter your email and password.");
       return;
     }
@@ -27,14 +28,14 @@ function initLoginPage() {
       const data = await apiFetch("/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: normalizedEmail, password }),
       });
 
       setCurrentUser(data.user);
       await syncLegacyMatchesToServer();
       showToast(`Welcome back, ${data.user.name}!`, "success");
       setTimeout(() => {
-        window.location.href = "./dashboard.html";
+        window.location.href = getPostAuthRedirect() || "./dashboard.html";
       }, 1000);
     } catch (error) {
       showError(errorDiv, error?.message || "Cannot connect to server. Make sure the backend is running.");
@@ -59,6 +60,8 @@ function initRegisterPage() {
     const errorDiv = document.getElementById("registerError");
     const submitBtn = registerForm.querySelector('button[type="submit"]');
 
+    const normalizedEmail = email.toLowerCase();
+
     if (!name || !email || !password || !confirmPassword) {
       showError(errorDiv, "All fields are required.");
       return;
@@ -71,7 +74,7 @@ function initRegisterPage() {
       showError(errorDiv, "Passwords do not match.");
       return;
     }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
       showError(errorDiv, "Please enter a valid email address.");
       return;
     }
@@ -87,14 +90,21 @@ function initRegisterPage() {
       const data = await apiFetch("/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({
+          name,
+          email: normalizedEmail,
+          password,
+          preferences: {
+            petType: document.getElementById("preferredPet")?.value || "",
+          },
+        }),
       });
 
       setCurrentUser(data.user);
       await syncLegacyMatchesToServer();
       showToast("Account created! Welcome to PawMatch!", "success");
       setTimeout(() => {
-        window.location.href = "./dashboard.html";
+        window.location.href = getPostAuthRedirect() || "./dashboard.html";
       }, 1000);
     } catch (error) {
       showError(errorDiv, error?.message || "Cannot connect to server. Make sure the backend is running.");
@@ -131,6 +141,19 @@ function showError(div, message) {
   if (!div) return;
   div.textContent = message;
   div.style.display = "block";
+}
+
+function getPostAuthRedirect() {
+  const params = new URLSearchParams(window.location.search);
+  const next = params.get("next") || params.get("redirect");
+
+  if (!next) return "";
+
+  if (next.includes("://") || next.startsWith("//")) {
+    return "";
+  }
+
+  return next;
 }
 
 document.addEventListener("DOMContentLoaded", function () {

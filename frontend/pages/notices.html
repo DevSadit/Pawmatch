@@ -61,11 +61,11 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-muted fw-semibold"><span id="noticesCount">0</span> notices</span>
           <div>
-            <button class="notice-filter-btn active" onclick="filterNotices('All')">All</button>
-            <button class="notice-filter-btn" onclick="filterNotices('Health')">💉 Health</button>
-            <button class="notice-filter-btn" onclick="filterNotices('Alert')">🚨 Alerts</button>
-            <button class="notice-filter-btn" onclick="filterNotices('Campaign')">🎉 Campaigns</button>
-            <button class="notice-filter-btn" onclick="filterNotices('Update')">📢 Updates</button>
+            <button class="notice-filter-btn active" onclick="filterNotices('All', this)">All</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Health', this)">💉 Health</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Alert', this)">🚨 Alerts</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Campaign', this)">🎉 Campaigns</button>
+            <button class="notice-filter-btn" onclick="filterNotices('Update', this)">📢 Updates</button>
           </div>
         </div>
 

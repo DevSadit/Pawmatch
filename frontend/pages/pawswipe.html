@@ -55,9 +55,12 @@
 </head>
 <body class="bg-surface font-body text-on-surface" style="min-height:100dvh;">
 
-  <!-- Ambient background wash (full page) -->
-  <div class="fixed inset-0 z-0 pointer-events-none opacity-10 lg:opacity-[0.07]">
-    <div class="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-gradient-to-br from-primary to-primary-container blur-[100px]"></div>
+  <!-- Ambient background wash -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div class="absolute top-[-15%] left-[-20%] w-[70%] h-[70%] rounded-full opacity-[0.09] blur-[80px]"
+         style="background: radial-gradient(circle, #f9873e 0%, #964300 100%);"></div>
+    <div class="absolute bottom-[-10%] right-[-15%] w-[55%] h-[55%] rounded-full opacity-[0.06] blur-[70px]"
+         style="background: radial-gradient(circle, #7cf6ec 0%, #006761 100%);"></div>
   </div>
 
   <main class="relative w-full flex flex-col items-center justify-center pt-20 pb-28 px-4 overflow-hidden
@@ -67,8 +70,13 @@
     <!-- ── LEFT / CENTER: Card column ── -->
     <div class="flex flex-col items-center z-10 lg:flex-shrink-0">
 
-      <!-- Counter -->
-      <div class="mb-3 text-center">
+      <!-- Title + Counter -->
+      <div class="mb-5 text-center">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full mb-2"
+             style="background: rgba(150,67,0,0.08); border: 1px solid rgba(150,67,0,0.15);">
+          <span class="material-symbols-outlined text-primary" style="font-size:0.95rem; font-variation-settings:'FILL' 1;">style</span>
+          <span class="text-primary font-label font-bold text-xs uppercase tracking-widest">PawSwipe</span>
+        </div>
         <p class="text-on-surface-variant text-sm font-medium" id="swipeCounter">Loading pets...</p>
       </div>
 
@@ -79,44 +87,69 @@
 
       <!-- Card Stack -->
       <div class="relative w-full max-w-sm flex flex-col justify-center lg:w-[360px]" style="height:520px;">
-        <div class="absolute inset-0 translate-y-6 scale-[0.90] bg-surface-container-high rounded-xl opacity-50 pointer-events-none"></div>
-        <div class="absolute inset-0 translate-y-3 scale-[0.95] bg-surface-container-low rounded-xl opacity-70 pointer-events-none"></div>
+        <div class="absolute inset-0 translate-y-6 scale-[0.90] rounded-xl opacity-40 pointer-events-none"
+             style="background: linear-gradient(135deg, #e9e8e4, #deddd8);"></div>
+        <div class="absolute inset-0 translate-y-3 scale-[0.95] rounded-xl opacity-65 pointer-events-none"
+             style="background: linear-gradient(135deg, #f2f1ec, #e9e8e4);"></div>
         <div id="swipeContainer" class="swipe-card-container" style="width:100%;height:520px;position:relative;"></div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex justify-center items-center gap-5 mt-6">
-        <button id="btnDislike"
-          class="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center text-error hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100">
-          <span class="material-symbols-outlined text-2xl font-bold">close</span>
-        </button>
-        <button id="btnInfo"
-          class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-secondary hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100">
-          <span class="material-symbols-outlined text-xl">info</span>
-        </button>
-        <button id="btnSuper"
-          class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-300 border border-stone-100" style="color:#006761;">
-          <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">star</span>
-        </button>
-        <button id="btnLike"
-          class="w-20 h-20 rounded-full flex items-center justify-center text-white hover:scale-110 active:scale-90 transition-all duration-300 shadow-[0_10px_20px_rgba(150,67,0,0.3)]"
-          style="background: linear-gradient(135deg, #964300, #f9873e);">
-          <span class="material-symbols-outlined text-4xl" style="font-variation-settings:'FILL' 1">favorite</span>
-        </button>
+      <div class="flex justify-center items-end gap-4 mt-7">
+
+        <!-- Skip -->
+        <div class="flex flex-col items-center gap-1.5">
+          <button id="btnDislike"
+            class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-error hover:scale-110 active:scale-90 transition-all duration-200 border border-red-100">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+          <span class="text-xs text-on-surface-variant font-medium">Skip</span>
+        </div>
+
+        <!-- Info -->
+        <div class="flex flex-col items-center gap-1.5">
+          <button id="btnInfo"
+            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center text-secondary hover:scale-110 active:scale-90 transition-all duration-200 border border-stone-100">
+            <span class="material-symbols-outlined text-lg">info</span>
+          </button>
+          <span class="text-xs text-on-surface-variant font-medium">Info</span>
+        </div>
+
+        <!-- Super Like -->
+        <div class="flex flex-col items-center gap-1.5">
+          <button id="btnSuper"
+            class="w-11 h-11 rounded-full bg-white shadow-sm flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200 border border-stone-100"
+            style="color:#006761;">
+            <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">star</span>
+          </button>
+          <span class="text-xs text-on-surface-variant font-medium">Super</span>
+        </div>
+
+        <!-- Like -->
+        <div class="flex flex-col items-center gap-1.5">
+          <button id="btnLike"
+            class="w-16 h-16 rounded-full flex items-center justify-center text-white hover:scale-110 active:scale-90 transition-all duration-200 shadow-[0_8px_24px_rgba(150,67,0,0.35)]"
+            style="background: linear-gradient(135deg, #964300, #f9873e);">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">favorite</span>
+          </button>
+          <span class="text-xs font-bold text-primary">Like</span>
+        </div>
+
       </div>
 
-      <!-- Quick Links (mobile only — shown in sidebar on desktop) -->
-      <div class="flex gap-4 mt-5 lg:hidden">
+      <!-- Quick Links (mobile only) -->
+      <div class="flex gap-3 mt-5 lg:hidden">
         <a href="./my-matches.html"
-           class="text-primary font-bold text-xs font-label uppercase tracking-widest flex items-center gap-1">
+           class="flex items-center gap-1.5 px-4 py-2 rounded-full font-label font-bold text-xs uppercase tracking-wide text-primary active:scale-95 transition-transform"
+           style="background: rgba(150,67,0,0.08); border: 1px solid rgba(150,67,0,0.18);">
           <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">favorite</span>
           My Matches
         </a>
-        <span class="text-outline-variant">·</span>
         <a href="./match-finder.html"
-           class="text-on-surface-variant font-bold text-xs font-label uppercase tracking-widest flex items-center gap-1">
+           class="flex items-center gap-1.5 px-4 py-2 rounded-full font-label font-bold text-xs uppercase tracking-wide text-on-surface-variant bg-surface-container-low active:scale-95 transition-transform"
+           style="border: 1px solid rgba(174,173,170,0.35);">
           <span class="material-symbols-outlined text-sm">quiz</span>
-          Personality Quiz
+          Quiz
         </a>
       </div>
     </div>
@@ -126,7 +159,10 @@
 
       <!-- How to swipe -->
       <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm">
-        <h3 class="font-headline font-bold text-base mb-4 text-on-surface">How to Swipe</h3>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="material-symbols-outlined text-primary" style="font-size:1.1rem;">swipe</span>
+          <h3 class="font-headline font-bold text-base text-on-surface">How to Swipe</h3>
+        </div>
         <div class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-red-50 border border-red-100 flex items-center justify-center flex-shrink-0">
@@ -151,7 +187,10 @@
 
       <!-- Quick actions -->
       <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-3">
-        <h3 class="font-headline font-bold text-base mb-1 text-on-surface">Your Activity</h3>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-primary" style="font-size:1.1rem; font-variation-settings:'FILL' 1;">dashboard</span>
+          <h3 class="font-headline font-bold text-base text-on-surface">Your Activity</h3>
+        </div>
         <a href="./my-matches.html"
            class="flex items-center gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors group">
           <span class="material-symbols-outlined text-tertiary" style="font-variation-settings:'FILL' 1">favorite</span>

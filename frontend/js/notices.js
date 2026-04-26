@@ -114,7 +114,7 @@ function renderNotices(notices) {
 }
 
 // ---- Filter notices by category ----
-function filterNotices(category) {
+function filterNotices(category, button) {
   const cards = document.querySelectorAll(".notice-card");
   cards.forEach((card) => {
     if (category === "All" || card.innerHTML.includes(category)) {
@@ -128,7 +128,9 @@ function filterNotices(category) {
   document.querySelectorAll(".notice-filter-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
-  event.target.classList.add("active");
+  if (button) {
+    button.classList.add("active");
+  }
 }
 
 // ---- Initialize ----

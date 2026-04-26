@@ -14,6 +14,17 @@ let isDragging = false;   // Is the user currently dragging?
 let startX = 0;           // Starting X position of drag
 let currentX = 0;         // Current X position while dragging
 
+async function ensurePawSwipeAccess() {
+  const user = await syncCurrentUser().catch(() => null);
+
+  if (!user) {
+    window.location.replace("./login.html?next=pawswipe.html");
+    return null;
+  }
+
+  return user;
+}
+
 // ---- Load pets from backend for swiping ----
 // This is AJAX Call #3 as required by the PRD
 async function loadSwipePets() {
@@ -346,9 +357,12 @@ function restartSwipe() {
 }
 
 // ---- Initialize PawSwipe page ----
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   const swipeContainer = document.getElementById("swipeContainer");
   if (!swipeContainer) return;
+
+  const user = await ensurePawSwipeAccess();
+  if (!user) return;
 
   loadSwipePets();
 

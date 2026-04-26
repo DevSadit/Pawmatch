@@ -103,12 +103,13 @@ function openBlogModal(blogId) {
 }
 
 // ---- Filter blogs by category ----
-function filterByCategory(category) {
-  // Update active button
+function filterByCategory(category, button) {
   document.querySelectorAll(".category-filter-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
-  event.target.classList.add("active");
+  if (button) {
+    button.classList.add("active");
+  }
 
   if (category === "All") {
     renderBlogs(allBlogs);

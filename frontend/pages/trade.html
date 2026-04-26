@@ -71,7 +71,11 @@
 
       // Update active tab
       document.querySelectorAll("#tradeTabs .nav-link").forEach(btn => btn.classList.remove("active"));
-      event?.target?.classList.add("active");
+      const activeButton =
+        status === "Sale" ? document.getElementById("saleTab") :
+        status === "Rehome" ? document.getElementById("rehomeTab") :
+        document.getElementById("allTab");
+      if (activeButton) activeButton.classList.add("active");
 
       loading.style.display = "flex";
       container.innerHTML = "";

@@ -10,24 +10,50 @@ const router   = express.Router();
 const bcrypt   = require("bcryptjs");
 const User     = require("../models/User");
 
+function normalizeEmail(email) {
+  return (email || "").trim().toLowerCase();
+}
+
+function saveSession(req) {
+  return new Promise((resolve, reject) => {
+    req.session.save((err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+}
+
 // ---- POST /api/auth/register ----
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, preferences } = req.body;
+  const normalizedEmail = normalizeEmail(email);
 
-  if (!name || !email || !password) {
+  if (!name || !normalizedEmail || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ email: normalizedEmail });
     if (existing) {
       return res.status(400).json({ message: "Email already registered" });
     }
 
-    const hashed  = await bcrypt.hash(password, 12);
-    const newUser = await User.create({ name, email, password: hashed });
+    const hashed = await bcrypt.hash(password, 12);
+    const userPreferences = preferences || {};
+
+    const newUser = await User.create({
+      name,
+      email: normalizedEmail,
+      password: hashed,
+      preferences: {
+        petType: userPreferences.petType || "",
+        energy: userPreferences.energy || "",
+        homeType: userPreferences.homeType || "",
+      },
+    });
 
     req.session.userId = newUser._id.toString();
+    await saveSession(req);
 
     res.status(201).json({ message: "Registration successful", user: newUser.toJSON() });
   } catch (err) {
@@ -39,14 +65,15 @@ router.post("/register", async (req, res) => {
 // ---- POST /api/auth/login ----
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  const normalizedEmail = normalizeEmail(email);
 
-  if (!email || !password) {
+  if (!normalizedEmail || !password) {
     return res.status(400).json({ message: "Email and password required" });
   }
 
   try {
     // select("+password") not needed here since we excluded password in toJSON transform only
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email: normalizedEmail }).select("+password");
 
     // Re-attach password field for comparison (schema hides it in toJSON but not in model)
     if (!user) {
@@ -62,6 +89,7 @@ router.post("/login", async (req, res) => {
     }
 
     req.session.userId = user._id.toString();
+    await saveSession(req);
 
     res.json({ message: "Login successful", user: user.toJSON() });
   } catch (err) {

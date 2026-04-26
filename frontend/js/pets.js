@@ -75,7 +75,8 @@ function renderPetCard(pet) {
           onerror="this.src='https://placehold.co/400x220/e9e8e4/aaa?text=No+Image'"
         >
         <button
-          onclick='event.preventDefault(); event.stopPropagation(); saveToMatchesBrowse(${JSON.stringify(pet).replace(/'/g, "&apos;")})'
+          type="button"
+          onclick='saveToMatchesBrowse(${JSON.stringify(pet).replace(/'/g, "&apos;")})'
           class="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-tertiary shadow-sm backdrop-blur"
           aria-label="Save ${pet.name}"
         >

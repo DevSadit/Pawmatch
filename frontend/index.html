@@ -88,16 +88,26 @@
     <main class="mt-20 px-4 lg:px-8 lg:max-w-7xl lg:mx-auto">
       <!-- ── Hero Section ── -->
       <section
-        class="relative overflow-hidden rounded-xl bg-surface-container-low p-6 flex flex-col gap-6 mb-10 lg:flex-row lg:items-stretch lg:gap-0 lg:p-0 lg:min-h-[420px]"
+        class="relative overflow-hidden rounded-xl p-6 flex flex-col gap-6 mb-10 lg:flex-row lg:items-stretch lg:gap-0 lg:p-0 lg:min-h-[420px]"
+        style="background: linear-gradient(135deg, #fde68a 0%, #fef3c7 58%, #fffbeb 100%);"
       >
         <!-- Text column -->
         <div
           class="relative z-10 flex flex-col gap-4 lg:flex-1 lg:p-12 lg:justify-center"
         >
+          <!-- Decorative amber glow blobs -->
+          <div class="absolute -top-20 -left-20 w-72 h-72 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(251,191,36,0.55) 0%, transparent 68%); filter: blur(36px); z-index: 0;"></div>
+          <div class="absolute -bottom-10 right-4 w-56 h-56 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(217,119,6,0.38) 0%, transparent 68%); filter: blur(28px); z-index: 0;"></div>
+          <!-- Eyebrow badge -->
+          <div class="inline-flex items-center gap-1.5 self-start px-3 py-1.5 rounded-full text-xs font-bold font-label uppercase tracking-widest" style="background: rgba(251,191,36,0.32); color: #92400e; border: 1.5px solid rgba(245,158,11,0.55); backdrop-filter: blur(4px);">
+            <span class="material-symbols-outlined" style="font-size: 1rem; color: #d97706;">auto_awesome</span>
+            Your Forever Friend Awaits
+          </div>
           <h1
             class="text-4xl font-extrabold font-headline text-on-primary-container leading-tight lg:text-5xl"
           >
-            Find Your Perfect Furry Companion
+            Find Your Perfect<br />
+            <span style="background: linear-gradient(90deg, #92400e 0%, #b45309 35%, #d97706 70%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Furry Companion</span>
           </h1>
           <p
             class="text-on-surface-variant font-body text-base lg:text-lg lg:max-w-md"
@@ -164,16 +174,15 @@
         </div>
         <!-- Hero Image — stacks below on mobile, fills right column on desktop -->
         <div
-          class="relative -mx-6 -mb-6 h-52 overflow-hidden rounded-t-[3rem] bg-gradient-to-br from-primary-container to-primary flex items-center justify-center lg:flex-1 lg:mx-0 lg:mb-0 lg:rounded-none lg:rounded-r-xl lg:h-auto lg:min-h-full"
+          class="relative -mx-6 -mb-6 h-72 overflow-hidden rounded-t-[3rem] lg:flex-1 lg:mx-0 lg:mb-0 lg:rounded-none lg:rounded-r-xl lg:h-auto lg:min-h-full"
         >
-          <span
-            style="
-              font-size: 6rem;
-              animation: float 3s ease-in-out infinite;
-              display: block;
-            "
-            >🐶</span
-          >
+          <img
+            src="./assets/images/pexels-mahmoud-yahyaoui-28683174.jpg"
+            alt="Happy Labrador dog looking at you"
+            class="w-full h-full object-cover object-top"
+          />
+          <!-- subtle warm vignette to blend with the golden hero -->
+          <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(to left, rgba(150,67,0,0.10) 0%, transparent 55%), linear-gradient(to top, rgba(253,230,138,0.18) 0%, transparent 40%);"></div>
         </div>
       </section>
 
@@ -300,6 +309,58 @@
               >QUIZ</span
             >
           </a>
+        </div>
+      </section>
+
+      <!-- ── Photo Gallery ── -->
+      <section class="mb-10">
+        <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+
+          <!-- Wide card: dog on leash (portrait 3:4 — shown tall on mobile, wide on desktop) -->
+          <a href="./pages/pets.html?type=Dog"
+             class="relative overflow-hidden rounded-2xl h-48 col-span-1 lg:col-span-2 lg:h-60 group block">
+            <img
+              src="./assets/images/pexels-connorscottmcmanus-31461107.jpg"
+              alt="Friendly tan dog on a leash"
+              class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 flex flex-col justify-end p-4 pointer-events-none"
+                 style="background: linear-gradient(to top, rgba(69,27,0,0.58) 0%, transparent 58%);">
+              <span class="text-white font-headline font-bold text-base lg:text-lg leading-tight">Dogs</span>
+              <span class="text-white/75 text-xs mt-0.5">Browse available pups</span>
+            </div>
+          </a>
+
+          <!-- Cat close-up (square) -->
+          <a href="./pages/pets.html?type=Cat"
+             class="relative overflow-hidden rounded-2xl h-48 lg:h-60 group block">
+            <img
+              src="./assets/images/pexels-yeye-159057926-18168507.jpg"
+              alt="Orange tabby cat with green eyes"
+              class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 flex flex-col justify-end p-4 pointer-events-none"
+                 style="background: linear-gradient(to top, rgba(69,27,0,0.58) 0%, transparent 58%);">
+              <span class="text-white font-headline font-bold text-base lg:text-lg leading-tight">Cats</span>
+              <span class="text-white/75 text-xs mt-0.5">Find your feline friend</span>
+            </div>
+          </a>
+
+          <!-- Beagle (square) -->
+          <a href="./pages/pets.html"
+             class="relative overflow-hidden rounded-2xl h-48 lg:h-60 group block">
+            <img
+              src="./assets/images/pexels-gabriel-silva-2149106618-30432649.jpg"
+              alt="Happy Beagle dog with tongue out"
+              class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+            />
+            <div class="absolute inset-0 flex flex-col justify-end p-4 pointer-events-none"
+                 style="background: linear-gradient(to top, rgba(69,27,0,0.58) 0%, transparent 58%);">
+              <span class="text-white font-headline font-bold text-base lg:text-lg leading-tight">Browse All</span>
+              <span class="text-white/75 text-xs mt-0.5">12+ pets listed</span>
+            </div>
+          </a>
+
         </div>
       </section>
 
